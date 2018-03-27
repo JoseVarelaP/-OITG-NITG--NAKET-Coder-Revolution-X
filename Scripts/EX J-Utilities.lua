@@ -42,3 +42,7 @@ function hex2rgb(hex)
     -- hex values.
     return tonumber( string.sub(hex, 1,2) ), tonumber( string.sub(hex, 3,4) ), tonumber( string.sub(hex, 5,6) ), 1
 end
+
+function DiffuseHSV(name)
+	return name[index+1][1],name[index+1][2],name[index+1][3],name[index+1][4]
+end

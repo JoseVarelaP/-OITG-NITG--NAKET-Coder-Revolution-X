@@ -1,9 +1,10 @@
 <ActorFrame InitCommand="%function(self)
+index = 0
 LineSpacing = 96;
 VertHeight = SCREEN_CENTER_Y;
 iconChangeFocusSeconds = 0.15; -- was 0.05
 
-local OptionColors = {
+OptionColors = {
 	HSVA(128, 0.6, 0.275, 0.53125),	-- play
 	HSVA(192, 0.6, 0.275, 0.53125),	-- options
 	HSVA( 64, 0.6, 0.275, 0.53125),	-- edit
@@ -18,7 +19,7 @@ local OptionColors = {
 	hex2rgb('#44004488'), -- Jukebox    [V]
 };
 
-local OptionColorsFocused = {
+OptionColorsFocused = {
 	HSVA(128, 1, 0.45, 0.8),	-- play
 	HSVA(192, 1, 0.45, 0.8),	-- options
 	HSVA( 64, 1, 0.45, 0.8),	-- edit
@@ -33,7 +34,7 @@ local OptionColorsFocused = {
 	hex2rgb('#660066CC'), -- Jukebox    [V]
 };
 
-local OptionColorsBright = {
+OptionColorsBright = {
 	HSVA(128,0.6,0.85,1),	-- play
 	HSVA(192,0.6,0.85,1),	-- options
 	HSVA(64,0.6,0.85,1),	-- edit
@@ -53,37 +54,6 @@ local rot = { x = 0, y = 0, z = 0 };
 end"><children>
 
 	<Layer Type="ActorFrame"><children>
-		<!-- title menu squares, just because I can! -->
-		<!-- <Layer Type="Quad"
-			InitCommand="%function(self)
-			self:zoom(160,160);
-			self:shadowlength(1);
-			end"
-			GainFocusCommand="%function(self)
-			self:stoptweening();
-			self:bouncebegin(0.2);
-			self:zoom(200,200);
-			self:diffuse( 1,1,1,1 );
-			end"
-			LoseFocusCommand="%function(self)
-				self:stoptweening();
-				self:linear(0.2);
-				self:zoomto(160,160);
-				self:diffuse( 1,1,1,1 );
-			end"
-			OffFocusedCommand="linear,0.25;zoom,16*1.5;sleep,0.5;linear,0.25;zoomy,0;"
-			OffUnfocusedCommand="bouncebegin,0.25;zoom,0;"
-			/>
-		<Layer File="@ThemeFile('_icon')"
-			GainFocusCommand="%function(self)
-				self:diffuse( 1,1,1,1 );
-			end"
-			LoseFocusCommand="%function(self)
-				self:diffuse( 1,1,1,1 );
-			end"
-			/> -->
-
-
 		<!-- vert lines -->
 		<Layer Type="Quad"
 		InitCommand="x,-LineSpacing;zoomto,2,VertHeight;fadetop,0.25;fadebottom,0.25;"
@@ -110,12 +80,12 @@ end"><children>
 		<!-- texcoordvelocity: -1 to the right, 1 to the left. -->
 		<!-- center wall 1: top -->
 		<Layer File="_tex" 
-		InitCommand="y,-4;z,-94;zoomto,162,VertHeight*0.85;texcoordvelocity,0,0.125;cropbottom,0.5"
+		InitCommand="y,-4;z,-94;zoomto,164,VertHeight*0.85;texcoordvelocity,0,0.125;cropbottom,0.5"
 		/>
 
 		<!-- center wall 2: bottom -->
 		<Layer File="_tex" 
-		InitCommand="y,-4;z,-94;zoomto,162,VertHeight*0.85;texcoordvelocity,0,-0.125;croptop,0.5"
+		InitCommand="y,-4;z,-94;zoomto,164,VertHeight*0.85;texcoordvelocity,0,-0.125;croptop,0.5"
 		/>
 
 		<!-- floor -->
@@ -143,6 +113,50 @@ end"><children>
 		InitCommand="z,0;y,-106;zoomto,164,VertHeight;texcoordvelocity,0,-0.25;rotationx,90"
 		/>
 
+		<!-- item background -->
+		<Layer Type="Quad"
+			InitCommand="%function(self)
+			self:zoomto(190,VertHeight);
+			self:fadetop(0.25);
+			OC = OptionColors[index+1]
+			OCF = OptionColors[index+1]
+			self:diffusecolor( OC[1],OC[2],OC[3],OC[4] );
+			self:fadebottom(0.25);
+			self:blend('WeightedMultiply');
+			end"
+			GainFocusCommand="%function(self)
+			self:stoptweening();
+			self:decelerate(0.75);
+			self:diffusecolor( OCF[1],OCF[2],OCF[3],OCF[4] )
+			end"
+			LoseFocusCommand="%function(self)
+			self:stoptweening();
+			self:accelerate(0.3);
+			self:diffusecolor( OC[1],OC[2],OC[3],OC[4] )
+			end"
+			OffFocusedCommand="%function(self)
+				self:sleep(0.5);
+				self:decelerate(0.5);
+				self:zoomy(0);
+			end"
+			OffUnfocusedCommand="accelerate,0.5;zoomy,0;"
+			/>
+
+			<!-- item bg shine -->
+		<Layer Type="Quad"
+			InitCommand="%function(self)
+						self:zoomto(190,20);
+						self:y(-(VertHeight/2));
+						self:vertalign('top');
+						self:diffuse(OptionColorsBright[index+1][1],OptionColorsBright[index+1][2],OptionColorsBright[index+1][3],OptionColorsBright[index+1][4]);
+						self:fadetop(0.15);
+						self:fadebottom(0.75);
+						self:blend('add');
+					end"
+			GainFocusCommand="diffusealpha,0.5;linear,0.2;addy,VertHeight/2;diffusealpha,0"
+			LoseFocusCommand="stoptweening;diffusealpha,0;y,-(VertHeight/2)"
+			/>
+
 		</children></Layer>
 
 	</children></Layer>
@@ -152,33 +166,6 @@ end"><children>
 
 local index = Var("GameCommand"):GetIndex();
 local text = Var("GameCommand"):GetText();
-
-		-- ceiling
-		LoadActor( THEME:GetPathG("","_tex") )..{
-			InitCommand=cmd(z,0;y,-106;zoomto,164,VertHeight;texcoordvelocity,0,-0.25;rotationx,90);
-		};
-		--[[
-		-- ceiling shadow
-		Def.Quad{
-			InitCommand=cmd(z,0;y,-106;zoomto,164,VertHeight;rotationx,90;diffusecolor,color("0,0,0");diffusealpha,0.75;fadetop,0.5);
-		};
-		--]]
-	};
-
-	-- item background
-	Def.Quad{
-		InitCommand=cmd(zoomto,190,VertHeight;fadetop,0.25;diffusecolor,OptionColors[index+1];fadebottom,0.25;blend,'BlendMode_WeightedMultiply');
-		GainFocusCommand=cmd(stoptweening;decelerate,0.75;diffusecolor,OptionColorsFocused[index+1]);
-		LoseFocusCommand=cmd(stoptweening;accelerate,0.3;diffusecolor,OptionColors[index+1]);
-
-		OffFocusedCommand=function(self)
-			MESSAGEMAN:Broadcast("TitleMenuOff",{ SelectedIndex = index, Color = OptionColorsFocused[index+1] });
-			self:sleep(0.5);
-			self:decelerate(0.5);
-			self:zoomy(0);
-		end;
-		OffUnfocusedCommand=cmd(accelerate,0.5;zoomy,0);
-	};
 	-- item bg shine
 	Def.Quad{
 		--InitCommand=cmd(zoomto,190,20;y,-(VertHeight/2);vertalign,top;diffuse,color("1,1,1,0");fadebottom,0.25;blend,'BlendMode_Add');
