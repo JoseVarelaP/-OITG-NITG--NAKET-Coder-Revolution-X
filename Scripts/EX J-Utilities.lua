@@ -34,3 +34,11 @@ TitleMenu_OptionColorsFocused = {
 	HSVA(64,0.6,0.85,1),	-- edit
 	HSVA(0,0.6,0.85,1),	-- exit
 };
+
+function hex2rgb(hex)
+	-- We're taking everything as a string
+    hex = string.gsub(hex, "#","")
+    -- then we convert them into numbers, by also representing the values as numbers rather than
+    -- hex values.
+    return tonumber( string.sub(hex, 1,2) ), tonumber( string.sub(hex, 3,4) ), tonumber( string.sub(hex, 5,6) ), 1
+end

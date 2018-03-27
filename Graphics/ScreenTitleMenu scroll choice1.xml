@@ -1,21 +1,60 @@
-<ActorFrame><children>
-	<!-- local OptionColors = {
-	HSVA(128, 0.6, 0.325, 0.8),	-- play
-	HSVA(192, 0.6, 0.325, 0.8),	-- options
-	HSVA( 64, 0.6, 0.325, 0.8),	-- edit
-	HSVA(  0, 0.6, 0.325, 0.8),	-- exit
+<ActorFrame InitCommand="%function(self)
+LineSpacing = 96;
+VertHeight = SCREEN_CENTER_Y;
+iconChangeFocusSeconds = 0.15; -- was 0.05
+
+local OptionColors = {
+	HSVA(128, 0.6, 0.275, 0.53125),	-- play
+	HSVA(192, 0.6, 0.275, 0.53125),	-- options
+	HSVA( 64, 0.6, 0.275, 0.53125),	-- edit
+	HSVA(  0, 0.6, 0.275, 0.53125),	-- exit
+	-------------------------------------
+	hex2rgb('#44220088'), -- Start Game [O]
+	hex2rgb('#00440088'), -- Options    [G]
+	hex2rgb('#00004488'), -- Edit       [B]
+	hex2rgb('#44000088'), -- Exit       [R]
+	-------------------------------------
+	hex2rgb('#44440088'), -- Gametypes  [Y]
+	hex2rgb('#44004488'), -- Jukebox    [V]
 };
 
 local OptionColorsFocused = {
+	HSVA(128, 1, 0.45, 0.8),	-- play
+	HSVA(192, 1, 0.45, 0.8),	-- options
+	HSVA( 64, 1, 0.45, 0.8),	-- edit
+	HSVA(  0, 1, 0.45, 0.8),	-- exit
+	-------------------------------------
+	hex2rgb('#663300CC'), -- Start Game [O]
+	hex2rgb('#006600CC'), -- Options    [G]
+	hex2rgb('#000066CC'), -- Edit       [B]
+	hex2rgb('#660000CC'), -- Exit       [R]
+	-------------------------------------
+	hex2rgb('#666600CC'), -- Gametypes  [Y]
+	hex2rgb('#660066CC'), -- Jukebox    [V]
+};
+
+local OptionColorsBright = {
 	HSVA(128,0.6,0.85,1),	-- play
 	HSVA(192,0.6,0.85,1),	-- options
 	HSVA(64,0.6,0.85,1),	-- edit
 	HSVA(0,0.6,0.85,1),	-- exit
-}; -->
+	-------------------------------------
+	hex2rgb('#AA5500FF'), -- Start Game [O]
+	hex2rgb('#00AA00FF'), -- Options    [G]
+	hex2rgb('#0000AAFF'), -- Edit       [B]
+	hex2rgb('#AA0000FF'), -- Exit       [R]
+	-------------------------------------
+	hex2rgb('#AAAA00FF'), -- Gametypes  [Y]
+	hex2rgb('#AA00AAFF'), -- Jukebox    [V]
+};
+
+local rot = { x = 0, y = 0, z = 0 };
+
+end"><children>
 
 	<Layer Type="ActorFrame"><children>
 		<!-- title menu squares, just because I can! -->
-		<Layer Type="Quad"
+		<!-- <Layer Type="Quad"
 			InitCommand="%function(self)
 			self:zoom(160,160);
 			self:shadowlength(1);
@@ -42,63 +81,185 @@ local OptionColorsFocused = {
 			LoseFocusCommand="%function(self)
 				self:diffuse( 1,1,1,1 );
 			end"
-			/>
+			/> -->
+
+
+		<!-- vert lines -->
+		<Layer Type="Quad"
+		InitCommand="x,-LineSpacing;zoomto,2,VertHeight;fadetop,0.25;fadebottom,0.25;"
+		GainFocusCommand="finishtweening;linear,0.2;diffuse,#FFF186"
+		LoseFocusCommand="finishtweening;linear,0.2;diffuse,#FFFFFF"
+		OffFocusedCommand="accelerate,0.15;zoomx,4;sleep,0.5;decelerate,0.5;diffusealpha,0;"
+		OffUnfocusedCommand="accelerate,0.15;zoomy,0;"
+		/>
+
+		<Layer Type="Quad"
+		InitCommand="x,LineSpacing;zoomto,2,VertHeight;fadetop,0.25;fadebottom,0.25"
+		GainFocusCommand="finishtweening;linear,0.2;diffuse,#FFF186"
+		LoseFocusCommand="finishtweening;linear,0.2;diffuse,#FFFFFF"
+		OffFocusedCommand="accelerate,0.15;zoomx,4;sleep,0.5;decelerate,0.5;diffusealpha,0"
+		OffUnfocusedCommand="accelerate,0.15;zoomy,0"
+		/>
+
+		<!-- before BG -->
+		<Layer Type="ActorFrame" InitCommand="fov,45"
+		GainFocusCommand="linear,0.2;diffusealpha,0.5"
+		LoseFocusCommand="stoptweening;diffusealpha,0"
+		OffCommand="decelerate,2;diffusealpha,0"><children>
+
+		<!-- texcoordvelocity: -1 to the right, 1 to the left. -->
+		<!-- center wall 1: top -->
+		<Layer File="_tex" 
+		InitCommand="y,-4;z,-94;zoomto,162,VertHeight*0.85;texcoordvelocity,0,0.125;cropbottom,0.5"
+		/>
+
+		<!-- center wall 2: bottom -->
+		<Layer File="_tex" 
+		InitCommand="y,-4;z,-94;zoomto,162,VertHeight*0.85;texcoordvelocity,0,-0.125;croptop,0.5"
+		/>
+
+		<!-- floor -->
+		<Layer File="_tex" 
+		InitCommand="z,0;y,100;zoomto,163,VertHeight;texcoordvelocity,0,0.25;rotationx,-90"
+		/>
+
+		<!-- floor shadow? -->
+		<!-- <Layer File="_tex" 
+		InitCommand="z,0;y,100;zoomto,163,VertHeight;rotationx,-90;diffuse,0,0,0,1;diffusealpha,0.75;fadebottom,0.5"
+		/> -->
+
+		<!-- left side -->
+		<Layer File="_tex" 
+		InitCommand="x,-86;y,-1;z,-33;zoomto,244,VertHeight*0.9125;texcoordvelocity,-0.25,0;rotationy,-90"
+		/>
+
+		<!-- right side -->
+		<Layer File="_tex" 
+		InitCommand="x,86;y,-1;z,-33;zoomto,244,VertHeight*0.9125;texcoordvelocity,0.25,0;rotationy,90"
+		/>
+
+		<!-- ceiling -->
+		<Layer File="_tex" 
+		InitCommand="z,0;y,-106;zoomto,164,VertHeight;texcoordvelocity,0,-0.25;rotationx,90"
+		/>
+
+		</children></Layer>
+
 	</children></Layer>
 
 </children></ActorFrame>
 
-local iconChildren;
-local icons = Def.ActorFrame{
-	Name="IconHolder";
-	--y,SCREEN_CENTER_Y*1.685;
-	InitCommand=cmd(x,SCREEN_CENTER_X*0.9;y,SCREEN_BOTTOM*0.96);
-	OnCommand=cmd(addy,SCREEN_CENTER_Y;linear,0.25;addy,-SCREEN_CENTER_Y;);
-	BeginCommand=function(self) iconChildren = self:GetChildren(); end;
-	TitleGainFocusMessageCommand=function(self, param)
-		iconChildren["Icon"..(param.GainedFocus)+1]:playcommand("GainFocus");
+
+local index = Var("GameCommand"):GetIndex();
+local text = Var("GameCommand"):GetText();
+
+		-- ceiling
+		LoadActor( THEME:GetPathG("","_tex") )..{
+			InitCommand=cmd(z,0;y,-106;zoomto,164,VertHeight;texcoordvelocity,0,-0.25;rotationx,90);
+		};
+		--[[
+		-- ceiling shadow
+		Def.Quad{
+			InitCommand=cmd(z,0;y,-106;zoomto,164,VertHeight;rotationx,90;diffusecolor,color("0,0,0");diffusealpha,0.75;fadetop,0.5);
+		};
+		--]]
+	};
+
+	-- item background
+	Def.Quad{
+		InitCommand=cmd(zoomto,190,VertHeight;fadetop,0.25;diffusecolor,OptionColors[index+1];fadebottom,0.25;blend,'BlendMode_WeightedMultiply');
+		GainFocusCommand=cmd(stoptweening;decelerate,0.75;diffusecolor,OptionColorsFocused[index+1]);
+		LoseFocusCommand=cmd(stoptweening;accelerate,0.3;diffusecolor,OptionColors[index+1]);
+
+		OffFocusedCommand=function(self)
+			MESSAGEMAN:Broadcast("TitleMenuOff",{ SelectedIndex = index, Color = OptionColorsFocused[index+1] });
+			self:sleep(0.5);
+			self:decelerate(0.5);
+			self:zoomy(0);
+		end;
+		OffUnfocusedCommand=cmd(accelerate,0.5;zoomy,0);
+	};
+	-- item bg shine
+	Def.Quad{
+		--InitCommand=cmd(zoomto,190,20;y,-(VertHeight/2);vertalign,top;diffuse,color("1,1,1,0");fadebottom,0.25;blend,'BlendMode_Add');
+		InitCommand=cmd(zoomto,190,20; y,-(VertHeight/2);vertalign,top;
+						diffuse,OptionColorsBright[index+1];
+						fadetop,0.15;
+						fadebottom,0.75;
+						--diffusebottomedge,color("1,1,1,0.5");
+						blend,'BlendMode_Add'
+		);
+		GainFocusCommand=cmd(diffusealpha,0.5;linear,0.2;addy,VertHeight/2;diffusealpha,0);
+		LoseFocusCommand=cmd(stoptweening;diffusealpha,0;y,-(VertHeight/2));
+	};
+
+	-- icon base
+	LoadActor( THEME:GetPathG("","_icon") )..{
+		InitCommand=cmd(diffuse,OptionColorsBright[index+1]);
+		GainFocusCommand=cmd(spring,iconChangeFocusSeconds;addy,-8);
+		LoseFocusCommand=cmd(stoptweening;spring,iconChangeFocusSeconds;y,0);
+
+		OffFocusedCommand=cmd(decelerate,0.5;zoom,1.25;sleep,0.5;decelerate,0.5;zoom,0;diffusealpha,0);
+		OffUnfocusedCommand=cmd(spin;accelerate,0.5;zoom,0);
+	};
+
+	-- image
+	LoadActor( THEME:GetPathG("_title","images/"..text) )..{
+		GainFocusCommand=cmd(spring,iconChangeFocusSeconds;diffusealpha,1;addy,-8);
+		LoseFocusCommand=cmd(stoptweening;spring,iconChangeFocusSeconds;diffusealpha,0.05;y,0);
+		OffCommand=cmd(decelerate,0.5;zoom,1.25;sleep,0.5;decelerate,0.5;zoom,0;diffusealpha,0);
+	};
+
+	-- title
+	--Font("sf theramin gothic", "36px") ..{
+	Font("mentone", "24px") ..{
+		Name="Choice"..index;
+		Text=THEME:GetString( 'ScreenTitleMenu', text );
+		InitCommand=cmd(shadowlength,2;strokecolor,color("#22222244"));
+		GainFocusCommand=cmd(linear,iconChangeFocusSeconds;diffuse,color("#FFFFFF");y,8;glowshift;effectcolor2,1,0.9,0.33,0.25);
+		LoseFocusCommand=cmd(stoptweening;linear,iconChangeFocusSeconds;diffuse,color("#888888");y,0;stopeffect);
+		DisabledCommand=cmd(diffuse,0.5,0.5,0.5,1);
+		OffFocusedCommand=cmd(decelerate,0.5;zoom,1.25;sleep,0.5;decelerate,0.5;diffusealpha,0);
+		OffUnfocusedCommand=cmd(accelerate,0.5;diffusealpha,0);
+	};
+
+	-- explanation
+	--Font("handelgothic", "20px") ..{ -- zoom,0.75
+	--Font("helvetica", "uc 24px") ..{ -- zoom,1.5
+	--Font("mentone", "24px") ..{ -- zoom,1.0
+	Font("milibus","sb 20px")..{
+		Name="Explain"..index;
+		-- was y,64, then y,SCREEN_CENTER_Y*0.7
+		InitCommand=cmd(shadowlength,1;y,SCREEN_CENTER_Y*0.65;zoom,1.125;wrapwidthpixels,256;diffusebottomedge,color("#CCCCCC");strokecolor,color("#88888844"));
+		BeginCommand=function(self)
+			local explText = THEME:GetString( 'ScreenTitleMenu', text.."-Explanation" );
+			if text == "Exit" then
+				explText = string.format(THEME:GetString( 'ScreenTitleMenu', text.."-Explanation" ), ProductID());
+			end;
+			self:settext( explText );
+		end;
+		GainFocusCommand=cmd(finishtweening;linear,0.5;diffusealpha,1);
+		LoseFocusCommand=cmd(finishtweening;linear,0.5;diffusealpha,0);
+		OffCommand=cmd(accelerate,0.5;diffusealpha,0);
+	};
+};
+
+t[#t+1] = Def.Actor{
+	Name="TitleController";
+	GainFocusCommand=function(self)
+		MESSAGEMAN:Broadcast("TitleGainFocus", { GainedFocus = index });
 	end;
-	TitleLoseFocusMessageCommand=function(self, param)
-		iconChildren["Icon"..(param.LostFocus)+1]:playcommand("LoseFocus");
+	LoseFocusCommand=function(self)
+		MESSAGEMAN:Broadcast("TitleLoseFocus", { LostFocus = index });
 	end;
-	OffFocusedMessageCommand=function(self, param)
-		iconChildren["Icon"..(param.Focused)+1]:playcommand("OffFocused");
+	OffFocusedCommand=function(self)
+		MESSAGEMAN:Broadcast("OffFocused", { Focused = index });
 	end;
-	OffUnfocusedMessageCommand=function(self, param)
-		iconChildren["Icon"..(param.Unfocused)+1]:playcommand("OffUnfocused");
+	OffUnfocusedCommand=function(self)
+		MESSAGEMAN:Broadcast("OffUnfocused", { Unfocused = index });
 	end;
 };
 
--- title menu squares, just because I can!
-for i=1,4 do
-	icons[#icons+1] = Def.Quad{
-		Name="Icon"..i;
-		InitCommand=function(self)
-			self:x( (i-1) * 24 );
-			self:zoom(16,16);
-			self:shadowlength(1);
-			self:shadowcolor( color("1,1,1,0.125") );
-		end;
-		BeginCommand=function(self)
-			if i == 1 then
-				self:diffuse( OptionColorsFocused[i] );
-			else
-				self:diffuse( OptionColors[i] );
-			end;
-		end;
-		GainFocusCommand=function(self)
-			self:stoptweening();
-			self:bouncebegin(0.2);
-			self:zoomto(20,20);
-			self:diffuse( OptionColorsFocused[i] );
-		end;
-		LoseFocusCommand=function(self)
-			self:stoptweening();
-			self:linear(0.2);
-			self:zoomto(16,16);
-			self:diffuse( OptionColors[i] );
-		end;
-		OffFocusedCommand=cmd(linear,0.25;zoom,16*1.5;sleep,0.5;linear,0.25;zoomy,0;);
-		OffUnfocusedCommand=cmd(bouncebegin,0.25;zoom,0);
-	};
-end;
+return t;
+
 </children></ActorFrame>
