@@ -46,3 +46,48 @@ end
 function DiffuseHSV(name)
 	return name[index+1][1],name[index+1][2],name[index+1][3],name[index+1][4]
 end
+
+OptionColors = {
+	HSVA(128, 0.6, 0.275, 0.53125),	-- play
+	HSVA(192, 0.6, 0.275, 0.53125),	-- options
+	HSVA( 64, 0.6, 0.275, 0.53125),	-- edit
+	HSVA(  0, 0.6, 0.275, 0.53125),	-- exit
+	-------------------------------------
+	hex2rgb('#44220088'), -- Start Game [O]
+	hex2rgb('#00440088'), -- Options    [G]
+	hex2rgb('#00004488'), -- Edit       [B]
+	hex2rgb('#44000088'), -- Exit       [R]
+	-------------------------------------
+	hex2rgb('#44440088'), -- Gametypes  [Y]
+	hex2rgb('#44004488'), -- Jukebox    [V]
+};
+
+OptionColorsFocused = {
+	HSVA(128, 1, 0.45, 0.8),	-- play
+	HSVA(192, 1, 0.45, 0.8),	-- options
+	HSVA( 64, 1, 0.45, 0.8),	-- edit
+	HSVA(  0, 1, 0.45, 0.8),	-- exit
+	-------------------------------------
+	hex2rgb('#663300CC'), -- Start Game [O]
+	hex2rgb('#006600CC'), -- Options    [G]
+	hex2rgb('#000066CC'), -- Edit       [B]
+	hex2rgb('#660000CC'), -- Exit       [R]
+	-------------------------------------
+	hex2rgb('#666600CC'), -- Gametypes  [Y]
+	hex2rgb('#660066CC'), -- Jukebox    [V]
+};
+
+OptionColorsBright = {
+	HSVA(128,0.6,0.85,1),	-- play
+	HSVA(192,0.6,0.85,1),	-- options
+	HSVA(64,0.6,0.85,1),	-- edit
+	HSVA(0,0.6,0.85,1),	-- exit
+	-------------------------------------
+	hex2rgb('#AA5500FF'), -- Start Game [O]
+	hex2rgb('#00AA00FF'), -- Options    [G]
+	hex2rgb('#0000AAFF'), -- Edit       [B]
+	hex2rgb('#AA0000FF'), -- Exit       [R]
+	-------------------------------------
+	hex2rgb('#AAAA00FF'), -- Gametypes  [Y]
+	hex2rgb('#AA00AAFF'), -- Jukebox    [V]
+};

@@ -1,7 +1,7 @@
 <ActorFrame InitCommand="%function(self)
-IconName = 'Start Game'
-IconTitle = 'Play'
-IconDesc = 'Play the Game.'
+IconName = 'Edit'
+IconTitle = 'Edit'
+IconDesc = 'Edit/sync songs.'
 LineSpacing = 96;
 VertHeight = SCREEN_CENTER_Y;
 iconChangeFocusSeconds = 0.15; -- was 0.05
@@ -77,19 +77,19 @@ end"><children>
 			InitCommand="%function(self)
 			self:zoomto(190,VertHeight);
 			self:fadetop(0.25);
-			self:diffusecolor( OptionColors[1][1],OptionColors[1][2],OptionColors[1][3],OptionColors[1][4] );
+			self:diffusecolor( OptionColors[3][1],OptionColors[3][2],OptionColors[3][3],OptionColors[3][4] );
 			self:fadebottom(0.25);
 			self:blend('WeightedMultiply');
 			end"
 			GainFocusCommand="%function(self)
 			self:stoptweening();
 			self:decelerate(0.75);
-			self:diffusecolor( OptionColorsFocused[1][1],OptionColorsFocused[1][2],OptionColorsFocused[1][3],OptionColorsFocused[1][4] )
+			self:diffusecolor( OptionColorsFocused[3][1],OptionColorsFocused[3][2],OptionColorsFocused[3][3],OptionColorsFocused[3][4] )
 			end"
 			LoseFocusCommand="%function(self)
 			self:stoptweening();
 			self:accelerate(0.3);
-			self:diffusecolor( OptionColors[1][1],OptionColors[1][2],OptionColors[1][3],OptionColors[1][4] )
+			self:diffusecolor( OptionColors[3][1],OptionColors[3][2],OptionColors[3][3],OptionColors[3][4] )
 			end"
 			OffFocusedCommand="%function(self)
 				self:sleep(0.5);
@@ -102,14 +102,14 @@ end"><children>
 			<!-- item bg shine -->
 		<Layer Type="Quad"
 			InitCommand="%function(self)
-				self:zoomto(190,20);
-				self:y(-(VertHeight/2));
-				self:vertalign('top');
-				self:diffuse( OptionColorsBright[1][1],OptionColorsBright[1][2],OptionColorsBright[1][3],OptionColorsBright[1][4] );
-				self:fadetop(0.15);
-				self:fadebottom(0.75);
-				self:blend('add');
-			end"
+						self:zoomto(190,20);
+						self:y(-(VertHeight/2));
+						self:vertalign('top');
+						self:diffuse( OptionColorsBright[3][1],OptionColorsBright[3][2],OptionColorsBright[3][3],OptionColorsBright[3][4] );
+						self:fadetop(0.15);
+						self:fadebottom(0.75);
+						self:blend('add');
+					end"
 			GainFocusCommand="diffusealpha,0.5;linear,0.2;addy,VertHeight/2;diffusealpha,0"
 			LoseFocusCommand="stoptweening;diffusealpha,0;y,-(VertHeight/2)"
 			/>
@@ -117,7 +117,7 @@ end"><children>
 			<!-- icon base -->
 		<Layer File="_icon"
 		InitCommand="%function(self)
-		self:diffuse( OptionColorsBright[1][1],OptionColorsBright[1][2],OptionColorsBright[1][3],OptionColorsBright[1][4] );
+		self:diffuse( OptionColorsBright[3][1],OptionColorsBright[3][2],OptionColorsBright[3][3],OptionColorsBright[3][4] );
 		end"
 		GainFocusCommand="spring,iconChangeFocusSeconds;addy,-8"
 		LoseFocusCommand="stoptweening;spring,iconChangeFocusSeconds;y,0"

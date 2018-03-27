@@ -1,0 +1,8 @@
+<!-- -- 5: Exit
+-- An X. -->
+<ActorFrame><children>
+	<Layer File="_X" />
+</children></ActorFrame>
+<!-- return LoadActor( "_X" )..{
+	InitCommand=cmd();
+}; -->

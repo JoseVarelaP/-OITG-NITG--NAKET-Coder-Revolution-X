@@ -1,0 +1,5 @@
+<!-- return LoadActor("_edit.png")..{
+}; -->
+<ActorFrame><children>
+	<Layer File="_edit.png" />
+</children></ActorFrame>
