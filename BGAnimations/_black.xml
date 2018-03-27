@@ -1,0 +1,6 @@
+<!-- AND I'M BLACK, Y'ALL -->
+<ActorFrame><children>
+	<Layer Type="Quad" InitCommand="%function(self) FullScreen(self); self:diffuse(0,0,0,1) end" />
+</children></ActorFrame>
+<!-- I'M BLIGGITY BLACK BLACKITY BLACK BECAUSE I'M BLACK Y'ALL
+naket coder 2008 up in this B I A T C H -->

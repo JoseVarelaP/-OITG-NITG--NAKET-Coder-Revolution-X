@@ -1,0 +1,62 @@
+<ActorFrame><children>
+	<Layer File="ScreenWithMenuElements background/_nexus"
+		InitCommand="%function(self)
+		self:x(SCREEN_CENTER_X+128);
+		self:y(SCREEN_CENTER_Y);
+		self:diffusealpha(0.125);
+		self:blend('add');
+		end"
+		OnCommand="%function(self)
+		self:spin();
+		self:effectmagnitude(0,0,-5);
+		end"
+		OffCommand="%function(self)
+		self:decelerate(0.75);
+		self:diffusealpha(0);
+		end"
+		/>
+
+	<Layer File="_NCRX logo/_X"
+		InitCommand="%function(self)
+		Center(self);
+		end"
+		OnCommand="%function(self)
+		self:glowshift();
+		self:effectcolor1(1,1,1,0);
+		self:effectcolor2(1,1,1,0.5);
+		self:effectperiod(5);
+		end"
+		OffCommand="%function(self)
+		self:linear(0.75);
+		self:diffusealpha(0);
+		end"
+		/>
+
+	<Layer File="_NCRX logo/_ncr normal"
+		InitCommand="%function(self)
+		Center(self);
+		end"
+		OnCommand="%function(self)
+		self:glowshift();
+		self:effectcolor1(0.5,0.4,0,0);
+		self:effectcolor2(1,1,1,0.35);
+		self:effectperiod(5);
+		end"
+		OffCommand="%function(self)
+		self:linear(0.75);
+		self:diffusealpha(0);
+		end"
+		/>
+
+	<!-- logo shading -->
+	<Layer Type="Quad"
+		InitCommand="%function(self)
+		FullScreen(self);
+		self:diffuse(0,0,0,0);
+		end"
+		OnCommand="%function(self)
+		self:linear(0.75);
+		self:diffusealpha(0.25);
+		end"
+		/>
+</children></ActorFrame>

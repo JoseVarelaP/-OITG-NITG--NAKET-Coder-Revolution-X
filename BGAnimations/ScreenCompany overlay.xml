@@ -1,0 +1,157 @@
+<!-- ( 004 )
+
+nc[NT]: haha totally ganked this from perfect dark
+az[NT]: perfect dark is a p good game
+nc[NT]: I like that effect at the end where all the text goes away and all you
+see is naket World order. -->
+<ActorFrame OnCommand="%function(self)
+textLen = 0;
+origTextLen = 0;
+end"><children>
+
+<!-- text color is #7777EE -->
+	<!-- header -->
+	<Layer Font="handelgothic/_20px" Text="@GetProductName()..' Theme Identification'"
+	InitCommand="x,SCREEN_LEFT+55;y,SCREEN_CENTER_Y-70;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.8"
+	/>
+	<!-- top line -->
+	<Layer Type="Quad"
+	InitCommand="x,SCREEN_LEFT+55;y,SCREEN_CENTER_Y-57;horizalign,left;zoomto,SCREEN_WIDTH*0.917,3;diffuse,#3F3F7F" />
+	<Layer Type="Quad"
+	InitCommand="x,SCREEN_LEFT+55;y,SCREEN_CENTER_Y-58;horizalign,left;zoomto,SCREEN_WIDTH*0.917,1;diffuse,#FFFFFF;diffusealpha,0.2;blend,add" />
+
+	<!-- inset lines are x,80 -->
+
+	<!-- product ID -->
+	<Layer Font="handelgothic/_20px" Text="Product ID:"
+	InitCommand="x,SCREEN_LEFT+80;y,SCREEN_CENTER_Y-40;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.8"
+	/>
+	<Layer Font="handelgothic/_20px" Text="@themeInfo['Name']"
+	InitCommand="x,SCREEN_CENTER_X*0.8;y,SCREEN_CENTER_Y-40;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.8"
+	/>
+
+	<!-- product code -->
+	<Layer Font="handelgothic/_20px" Text="Product Code:"
+	InitCommand="x,SCREEN_LEFT+80;y,SCREEN_CENTER_Y-20;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.8"
+	/>
+	<Layer Font="handelgothic/_20px" Text="@themeInfo['ProductCode']"
+	InitCommand="x,SCREEN_CENTER_X*0.8;y,SCREEN_CENTER_Y-20;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.8"
+	/>
+
+	<!-- variant -->
+	<Layer Font="handelgothic/_20px" Text="Variant:"
+	InitCommand="x,SCREEN_LEFT+80;y,SCREEN_CENTER_Y;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.8"
+	/>
+	<Layer Font="handelgothic/_20px" Text="@themeInfo['Version']"
+	InitCommand="x,SCREEN_CENTER_X*0.8;y,SCREEN_CENTER_Y;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.8"
+	/>
+
+	<!-- developer -->
+	<Layer Font="handelgothic/_20px" Text="Developer:"
+	InitCommand="x,SCREEN_LEFT+80;y,SCREEN_CENTER_Y+20;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.8"
+	/>
+	<Layer Font="handelgothic/_20px" Text="NAKET Team"
+	InitCommand="x,SCREEN_CENTER_X*0.8;y,SCREEN_CENTER_Y+20;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.8"
+	/>
+	<Layer Font="handelgothic/_20px" Text="(Original Distribution by StepMania Underground)"
+	InitCommand="x,WideScale(SCREEN_CENTER_X*1.15,SCREEN_CENTER_X*1.0875);y,SCREEN_CENTER_Y+20;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.6"
+	/>
+
+	<!-- separator line -->
+	<Layer Type="Quad"
+	InitCommand="x,SCREEN_LEFT+77;y,SCREEN_CENTER_Y+34;horizalign,left;zoomto,SCREEN_WIDTH*0.917,3;diffuse,#3F3F7F" />
+	<Layer Type="Quad"
+	InitCommand="x,SCREEN_LEFT+77;y,SCREEN_CENTER_Y+33;horizalign,left;zoomto,SCREEN_WIDTH*0.917,1;diffuse,#FFFFFF;diffusealpha,0.2;blend,add" />
+
+		<Layer Font="handelgothic/_20px" Text="0"
+			InitCommand="x,SCREEN_LEFT+80;y,SCREEN_CENTER_Y+48;shadowlength,0;horizalign,left"
+			OnCommand="%function(self)
+			local text = 'Expansion Pak ';
+			local postfix = SSC and 'Found' or NITG and 'Found' or 'Not Found';
+			self:settext( text..postfix );
+			end"
+			/>
+
+	<!-- separator line -->
+	<Layer Type="Quad"
+	InitCommand="x,SCREEN_LEFT+77;y,SCREEN_CENTER_Y+62;horizalign,left;zoomto,SCREEN_WIDTH*0.917,3;diffuse,#3F3F7F" />
+	<Layer Type="Quad"
+	InitCommand="x,SCREEN_LEFT+77;y,SCREEN_CENTER_Y+61;horizalign,left;zoomto,SCREEN_WIDTH*0.917,1;diffuse,#FFFFFF;diffusealpha,0.2;blend,add" />
+
+	<!-- giant block of small text here -->
+	<Layer Font="handelgothic/_20px" Text="@ScreenCompanyIntroText()"
+	InitCommand="x,SCREEN_LEFT+80;y,SCREEN_CENTER_Y+68;shadowlength,0;horizalign,left;vertalign,top;diffuse,#7777EE;zoom,0.6;wrapwidthpixels,SCREEN_WIDTH*1.328125"
+	OnCommand="playcommand,Accu"
+
+		AccuCommand="%function(self)
+		-- AccuCommand: Set Accumulator (textLen)
+			textLen = string.len(self:GetText());
+			origTextLen = textLen;
+			self:sleep(3);
+			self:linear(1);
+			self:playcommand('Recur');
+		end"
+
+		RecurCommand="%function(self)
+		-- RecurCommand: Recursion over the string
+			if textLen > 0 then
+				-- continue munching the string
+				local oldText = self:GetText();
+				local newText = string.sub(oldText,0,textLen);
+
+				if textLen < origTextLen then
+					newText = newText .. '_'
+				end;
+
+				self:settext(newText);
+				textLen = textLen - 1;
+				-- I preffer 0.0005 over 0.000075
+				self:sleep(origTextLen * 0.00005); -- was 0.00005
+				self:queuecommand('Recur');
+			else
+				-- naket world order time
+				self:diffusealpha(0);
+				self:sleep(0.2);
+				MESSAGEMAN:Broadcast('nWo');
+			end
+		end"
+	/>
+	<!-- nWo -->
+	<Layer File="_nWo"
+		InitCommand="x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y+125;diffusealpha,0"
+		nWoMessageCommand="decelerate,2;diffusealpha,1"
+		/>
+
+	<!-- final separator line -->
+	<Layer Type="Quad"
+	InitCommand="x,SCREEN_LEFT+77;y,SCREEN_CENTER_Y+189;horizalign,left;zoomto,SCREEN_WIDTH*0.917,3;diffuse,#3F3F7F" />
+	<Layer Type="Quad"
+	InitCommand="x,SCREEN_LEFT+77;y,SCREEN_CENTER_Y+188;horizalign,left;zoomto,SCREEN_WIDTH*0.917,1;diffuse,#FFFFFF;diffusealpha,0.2;blend,add" />
+
+	<!-- rare designs on the future <<< -->
+	<Layer Font="handelgothic/_20px" Text="0"
+		InitCommand="x,SCREEN_LEFT+80;y,SCREEN_CENTER_Y+198;shadowlength,0;horizalign,left;diffuse,#7777EE;zoom,0.55;"
+		OnCommand="%function(self)
+			local vocab = {
+				SSC = { Verb = 'designs on', Timeframe = 'future' },
+				NITG = { Verb = 'bonds on', Timeframe = 'past and future' },
+				SM4 = { Verb = 'struggles with', Timeframe = 'present' },
+			};
+			local vocabKey = SSC and 'SSC' or NITG and 'NITG' or 'SM4';
+			self:settext( 'naket '.. vocab[vocabKey].Verb ..' the '.. vocab[vocabKey].Timeframe ..' <<<' );
+		end"
+		/>
+
+	<!-- rumble pack code, why the fuck would you need this? -->
+	<Layer Type="Quad" OnCommand="zoom,0"
+		CodeMessageCommand="%function(self,param)
+			if param.Name == 'RumblePak' then
+				setenv('RumblePak',true);
+				SCREENMAN:GetTopScreen():vibrate();
+			end
+		end"
+		nWoMessageCommand="%function(self)
+			SCREENMAN:GetTopScreen():stopeffect()
+		end"
+		/>
+</children></ActorFrame>

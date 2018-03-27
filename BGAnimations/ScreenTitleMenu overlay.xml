@@ -1,0 +1,104 @@
+<ActorFrame><children>
+	<Layer
+		Font="mentone/_24px"
+		Text="00"
+		InitCommand="x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y*0.525;zoom,0.65;diffusealpha,0;blend,add;maxwidth,SCREEN_WIDTH*1.5;"
+		OnCommand="%function(self)
+		local text = themeInfo['Name']..' '..themeInfo['Version']..'/'..GetProductName()..' '..GetProductVer();
+		if SSC then
+			text = text ..' ('..VersionDate()..' @ '..VersionTime()..')';
+		end
+		self:settext(text);
+		self:linear(0.5)
+		self:diffusealpha(0.4)
+		end"
+		/>
+</children></ActorFrame>
+
+t[#t+1] = Font("mentone","24px")..{
+	InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y*0.525;zoom,0.65;diffusealpha,0;blend,Blend.Add;maxwidth,SCREEN_WIDTH*1.5;NoStroke);
+	BeginCommand=function(self)
+		local text = themeInfo['Name'].." "..themeInfo['Version'].."/"..ProductID().." "..ProductVersion();
+		if SSC then
+			text = text .." ("..VersionDate().." @ "..VersionTime()..")";
+		end;
+		self:settext(text);
+	end;
+	OnCommand=cmd(linear,0.5;diffusealpha,0.4;);
+};
+
+
+--[[  ]]
+local OptionColors = {
+	HSVA(128, 0.6, 0.325, 0.8),	-- play
+	HSVA(192, 0.6, 0.325, 0.8),	-- options
+	HSVA( 64, 0.6, 0.325, 0.8),	-- edit
+	HSVA(  0, 0.6, 0.325, 0.8),	-- exit
+};
+
+local OptionColorsFocused = {
+	HSVA(128,0.6,0.85,1),	-- play
+	HSVA(192,0.6,0.85,1),	-- options
+	HSVA(64,0.6,0.85,1),	-- edit
+	HSVA(0,0.6,0.85,1),	-- exit
+};
+
+local iconChildren;
+local icons = Def.ActorFrame{
+	Name="IconHolder";
+	--y,SCREEN_CENTER_Y*1.685;
+	InitCommand=cmd(x,SCREEN_CENTER_X*0.9;y,SCREEN_BOTTOM*0.96);
+	OnCommand=cmd(addy,SCREEN_CENTER_Y;linear,0.25;addy,-SCREEN_CENTER_Y;);
+	BeginCommand=function(self) iconChildren = self:GetChildren(); end;
+	TitleGainFocusMessageCommand=function(self, param)
+		iconChildren["Icon"..(param.GainedFocus)+1]:playcommand("GainFocus");
+	end;
+	TitleLoseFocusMessageCommand=function(self, param)
+		iconChildren["Icon"..(param.LostFocus)+1]:playcommand("LoseFocus");
+	end;
+	OffFocusedMessageCommand=function(self, param)
+		iconChildren["Icon"..(param.Focused)+1]:playcommand("OffFocused");
+	end;
+	OffUnfocusedMessageCommand=function(self, param)
+		iconChildren["Icon"..(param.Unfocused)+1]:playcommand("OffUnfocused");
+	end;
+};
+
+-- title menu squares, just because I can!
+for i=1,4 do
+	icons[#icons+1] = Def.Quad{
+		Name="Icon"..i;
+		InitCommand=function(self)
+			self:x( (i-1) * 24 );
+			self:zoom(16,16);
+			self:shadowlength(1);
+			self:shadowcolor( color("1,1,1,0.125") );
+		end;
+		BeginCommand=function(self)
+			if i == 1 then
+				self:diffuse( OptionColorsFocused[i] );
+			else
+				self:diffuse( OptionColors[i] );
+			end;
+		end;
+		GainFocusCommand=function(self)
+			self:stoptweening();
+			self:bouncebegin(0.2);
+			self:zoomto(20,20);
+			self:diffuse( OptionColorsFocused[i] );
+		end;
+		LoseFocusCommand=function(self)
+			self:stoptweening();
+			self:linear(0.2);
+			self:zoomto(16,16);
+			self:diffuse( OptionColors[i] );
+		end;
+		OffFocusedCommand=cmd(linear,0.25;zoom,16*1.5;sleep,0.5;linear,0.25;zoomy,0;);
+		OffUnfocusedCommand=cmd(bouncebegin,0.25;zoom,0);
+	};
+end;
+
+t[#t+1] = icons;
+--[[  ]]
+
+return t;
