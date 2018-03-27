@@ -13,36 +13,6 @@ end"><children>
 		self:diffusealpha(0);
 		end"
 		/>
-	<!-- -- test BG, kept here for posterity. -->
-	<!-- <Layer Type="Quad"
-		InitCommand="%function(self)
-		FullScreen(self);
-		self:diffuse(0,0,0,1);
-		end"
-		OnCommand="%function(self)
-		local colors = {
-				{ ColCon(136,0,0) },
-				{ ColCon(119,136,0) },
-				{ ColCon(0,0,136) },
-				{ ColCon(136,136,0) },
-				{ ColCon(136,0,136) },
-				{ ColCon(0,136,126) },
-			};
-
-			local randIdx = math.random( table.getn(colors) );
-
-			--self:diffuse( colors[math.random(#colors)] );
-			self:diffusealpha(0.8);
-			self:accelerate(10);
-			self:diffuse( colors[randIdx][1],colors[randIdx][2],colors[randIdx][3],1 );
-			self:queuecommand('On');
-		end"
-		OffCommand="accelerate,1.5;diffuse,0,0,0,1"
-		TitleMenuOffMessageCommand="%function(self)
-			self:linear(0.5);
-			self:diffuse( colors[randIdx][1],colors[randIdx][2],colors[randIdx][3],1 );
-		end"
-		/> -->
 
 	<!-- bottom clouds (scrolling down now) -->
 	<!-- texcoordvelocity,-0.2,0;blend,'BlendMode_Add'; -->

@@ -4,7 +4,7 @@ nc[NT]: haha totally ganked this from perfect dark
 az[NT]: perfect dark is a p good game
 nc[NT]: I like that effect at the end where all the text goes away and all you
 see is naket World order. -->
-<ActorFrame OnCommand="%function(self)
+<ActorFrame InitCommand="%function(self)
 textLen = 0;
 origTextLen = 0;
 end"><children>

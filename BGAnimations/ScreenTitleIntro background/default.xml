@@ -1,0 +1,54 @@
+<ActorFrame InitCommand="%function(self)
+gapSize = 5;
+cloudTex = '../ScreenTitleMenu background/_clouds';
+end"><children>
+
+	<Layer File="_rainbow"
+		InitCommand="%function(self)
+		Center(self);
+		self:texcoordvelocity(-0.65,0);
+		self:diffusealpha(0)
+		FullScreen(self);
+		end"
+		OnCommand="linear,2.5;diffusealpha,0.5;decelerate,3;diffusealpha,0;"
+		OffCommand="linear,1;diffusealpha,0"
+		/>
+
+	<!-- bottom clouds (scrolling down now) -->
+	<!-- texcoordvelocity,-0.2,0;blend,'BlendMode_Add'; -->
+	<Layer File="@cloudTex"
+		InitCommand="%function(self) Center(self); self:glow(1,1,1,0.1); self:diffusealpha(0.1) end"
+		OnCommand="texcoordvelocity,0,-0.125;customtexturerect,0,0,2,1;zoomx,2;zoomy,1.05;wag;effectmagnitude,0,0,5;effectperiod,10;linear,0.5;diffusealpha,0.4;"
+	/>
+
+	<!-- texcoordvelocity,0.295,0;blend,'BlendMode_Add'; -->
+	<Layer File="@cloudTex"
+		InitCommand="%function(self) Center(self); self:diffusealpha(0.5) self:rotationy(90) end"
+		OnCommand="texcoordvelocity,0,0.295;customtexturerect,0,0,2,1;zoomx,2;zoomy,1.05;linear,0.5;diffusealpha,0.3"
+	/>
+
+	<!-- top clouds -->
+	<!-- texcoordvelocity,-0.5,0;blend,'BlendMode_Add'; -->
+	<Layer File="@cloudTex"
+		InitCommand="%function(self) Center(self); self:rotationy(40) self:glow(1,1,1,0.05); self:diffusealpha(0.075) end"
+		OnCommand="texcoordvelocity,0,0.2;customtexturerect,0,0,2,1;zoomx,2.2;zoomy,1.05;linear,0.5;diffusealpha,0.25;"
+	/>
+
+</children></ActorFrame>
+	--[[
+	-- top
+	Def.Quad{
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_TOP;vertalign,top;zoomx,SCREEN_WIDTH;zoomy,0;diffuse,color("0,0,0,0.75"););
+		OnCommand=cmd(zoomy,0;);
+		OffCommand=cmd(linear,0.5;zoomy,SCREEN_CENTER_Y-99-gapSize;diffusebottomedge,color("0.25,0.25,0.25,0.75"));
+	};
+	-- bot
+	Def.Quad{
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_BOTTOM;vertalign,bottom;zoomx,SCREEN_WIDTH;zoomy,0;diffuse,color("0,0,0,0.75"););
+		OnCommand=cmd(zoomy,0);
+		OffCommand=cmd(linear,0.5;zoomy,SCREEN_CENTER_Y-139-gapSize;diffusetopedge,color("0.25,0.25,0.25,0.75"));
+	};
+	--]]
+};
+
+return t;

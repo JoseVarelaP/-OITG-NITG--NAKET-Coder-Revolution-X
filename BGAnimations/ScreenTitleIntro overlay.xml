@@ -1,0 +1,57 @@
+<ActorFrame><children>
+	<Layer File="ScreenWithMenuElements background/_nexus"
+		InitCommand="%function(self)
+		self:x(SCREEN_CENTER_X+128);
+		self:y(SCREEN_CENTER_Y);
+		self:diffusealpha(0.125);
+		self:blend('add');
+		end"
+		OnCommand="%function(self)
+		self:spin();
+		self:effectmagnitude(0,0,-5);
+		self:sleep(3);
+		self:accelerate(0.2);
+		self:diffusealpha(0.125);
+		self:glow(1,1,1,0.375);
+		self:hibernate(0.1);
+		self:decelerate(1);
+		self:glow(1,1,1,0);
+		end"
+		/>
+
+	<Layer File="_NCRX logo/_X"
+		InitCommand="%function(self)
+		self:x(SCREEN_CENTER_X);
+		self:y(SCREEN_CENTER_Y);
+		end"
+		OnCommand="diffusealpha,0;sleep,3;accelerate,0.2;diffusealpha,1;glow,1,1,1,1;hibernate,0.1;decelerate,1;glow,1,1,1,0;sleep,0.2;playcommand,After;"
+		AfterCommand="glowshift;effectcolor1,1,1,1,0.2;effectcolor2,1,1,1,0.5;effectperiod,8;"
+		OffCommand="hurrytweening,2;"
+		/>
+
+	<!--
+	-- i never got the timing on this right, and it doesn't help
+	-- that the X is using weird positioning...
+	LoadActor( THEME:GetPathB("_NCRX","logo/_X") )..{
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;diffusealpha,0;blend,'BlendMode_Add');
+		OnCommand=cmd(sleep,3.5;linear,0.5;diffusealpha,0.5;zoom,3.5;decelerate,0.2;addx,-320;diffusealpha,0);
+	}; -->
+
+	<Layer File="_NCRX logo/_ncr grayscale"
+		InitCommand="x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;"
+		OnCommand="cropright,1;faderight,1;cropleft,1;fadeleft,1;linear,2.5;cropright,0;faderight,0;hibernate,0.75;cropleft,0;fadeleft,0;sleep,0.1;diffusealpha,0;"
+		OffCommand="hurrytweening,2;"
+		/>
+
+	<Layer File="_NCRX logo/_ncr normal"
+		InitCommand="x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y;diffusealpha,0"
+		OnCommand="sleep,2.6;linear,0.75;diffusealpha,1"
+		OffCommand="hurrytweening,2;"
+		/>
+
+	<!-- LoadActor( THEME:GetPathB("press","start") )..{
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y+128);
+		OnCommand=cmd(diffuseramp;effectcolor1,color("1,1,1,1");effectcolor1,color("1,1,1,0");effectperiod,2);
+	}; -->
+
+</children></ActorFrame>
