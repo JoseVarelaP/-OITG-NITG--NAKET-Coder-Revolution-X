@@ -1,7 +1,5 @@
-# [OITG/NITG] NAKET Coder Revolution X
-
 <p align="center">
-	<!-- <img src="https://github.com/JoseVarelaP/-OITG-NITG--NAKET-Coder-Revolution-X/blob/master/GitHubBanner.png" > -->
+	<img src="https://github.com/JoseVarelaP/-OITG-NITG--NAKET-Coder-Revolution-X/blob/master/ReadMeImages/logo.png">
 	<br>A conversion of the NAKETCRX theme made for SM4 and early SM-SSC builds by NAKET Team
 	<hr>
 </p>
