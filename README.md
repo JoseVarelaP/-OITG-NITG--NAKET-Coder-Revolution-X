@@ -4,6 +4,13 @@
 	<hr>
 </p>
 
+### Currently Done
+- Boots
+- Coloring and HSV conversions
+- Checks for NTSC/PAL, SSC/SM4/NITG versions
+- ScreenCompany (Complete with it's functions)
+- *partially* ScreenTitleMenu (Still need to create choice menus and stuff)
+
 ### Instalation
 It is quite literally the same way like usual. Just put all the files on a folder inside the Themes folder of your OITG instalation.
 
