@@ -8,9 +8,11 @@
 
 **Instalation**
 It is quite literally the same way like usual. Just put all the files on a folder inside the Themes folder of your OITG instalation.
+<br>
 
 **Purpose of Porting**
 The actual idea of porting this theme, was initially because i wanted a challenge. I usually just port Sm3.9 themes with the help of my <a href="https://github.com/JoseVarelaP/OITGThemerFallback">OITGThemerFallback</a>, but never a SM4.0 theme. Then I went bored and decided to port a Sm4 theme, and this one particular theme series came to my mind first.
+<br>
 
 **Original Team Copyright**
 <hr>
