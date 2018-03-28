@@ -1,0 +1,338 @@
+<ActorFrame InitCommand="%function(self)
+bgColors = {
+	Primary   = HSVA(160, 1.0, 0.75, 0.4), -- was 44,1,0.75,0.4
+	Secondary = HSVA(176, 0.8, 0.65, 0.4), -- was 52,0.8,0.65,0.4
+};
+	pWeight = math.random(4,10);
+	spinPeriod = math.random(6,15);
+	function ParticleCommandInit(self)
+		self:blend('add');
+		self:diffusealpha(0.25);
+		self:queuecommand('Reset');
+	end
+	function ParticleCommandOn(self)
+		self:spin();
+		self:effectperiod(spinPeriod);
+		self:effectmagnitude(0,0,90);
+		self:queuecommand('Float');
+	end
+	function ParticleReset(self)
+		local randX = math.random(SCREEN_WIDTH*0.05,SCREEN_WIDTH*0.95);
+		local randZoom = math.random(0.25,1);
+		self:x(randX);
+		self:y(SCREEN_BOTTOM + math.random(32,128));
+		self:zoom(randZoom);
+	end
+	function ParticleFloat(self)
+		self:linear(0.5*pWeight);
+		self:y(-(SCREEN_HEIGHT*0.75));
+		self:sleep(math.random(1,3));
+		self:playcommand('Reset');
+		self:queuecommand('Float');
+	end
+
+wipeTime = 0.125;
+l2rWipes = 3; -- number of left to right wipes
+r2lWipes = 3; -- number of right to left wipes
+
+end"><children>
+<Layer Type="ActorFrame" OnCommand="fov,95"><children>
+	<Layer File="_bg base" InitCommand="%function(self) Center(self); FullScreen(self); end" />
+	<Layer File="_bg blur" InitCommand="%function(self) Center(self) FullScreen(self); self:diffusealpha(0.6) end" />
+	<Layer File="_bg over1" InitCommand="%function(self) Center(self) FullScreen(self); self:diffusealpha(0.35) end" />
+	<Layer File="_bg whiteglow" InitCommand="%function(self)
+	Center(self);
+	FullScreen(self);
+	self:diffusealpha(0.5);
+	self:diffuseshift();
+	self:effectcolor1(1,1,1,1);
+	self:effectcolor1(1,1,1,0.25);
+	self:effectperiod(30);
+	end" />
+
+	<!-- xxx: this one needs overlay in order to function properly... -->
+	<Layer File="_bg over2" InitCommand="%function(self)
+	Center(self);
+	FullScreen(self);
+	self:diffusealpha(0.25);
+	self:diffuseshift();
+	self:effectcolor1(1,1,1,1);
+	self:effectcolor1(1,1,1,0.25);
+	self:effectperiod(45);
+	end" />
+
+	<Layer File="_bg over1" InitCommand="%function(self)
+	Center(self);
+	FullScreen(self);
+	self:diffusealpha(0.45);
+	self:zoom(1.5)
+	self:bob();
+	self:effectmagnitude(-64,64,0)
+	self:effectperiod(15);
+	end" />
+
+	<Layer File="_bg over2" InitCommand="%function(self)
+	Center(self);
+	FullScreen(self);
+	self:diffusealpha(0.325);
+	self:bob();
+	self:effectmagnitude(0,-24,0)
+	self:effectperiod(20);
+	self:effectoffset(0.25);
+	end" />
+
+	<Layer File="_nexus"
+		InitCommand="x,SCREEN_CENTER_X*0.175;y,SCREEN_CENTER_Y;diffusealpha,0.075;blend,add;faderight,0.75;rotationy,20"
+		OnCommand="spin;effectperiod,60;effectmagnitude,0,0,15"
+		/>
+
+	<Layer Type="Quad"
+		InitCommand="%function(self)
+		FullScreen(self);
+		self:diffuse(bgColors.Primary[1],bgColors.Primary[2],bgColors.Primary[3],bgColors.Primary[4])
+		self:blend('WeightedMultiply')
+		end"
+		OnCommand="%function(self)
+		self:diffuseshift();
+		self:effectperiod(60);
+		self:effectcolor1(bgColors.Primary[1],bgColors.Primary[2],bgColors.Primary[3],bgColors.Primary[4]);
+		self:effectcolor2(bgColors.Secondary[1],bgColors.Secondary[2],bgColors.Secondary[3],bgColors.Secondary[4]);
+		end"
+		/>
+
+	<Layer File="_diag"
+		InitCommand="%function(self)
+		Center(self);
+		self:diffusealpha(0.175);
+		self:blend('add');
+		self:rotationx(-7);
+		self:scaletocover(SCREEN_LEFT-(SCREEN_CENTER_X*0.125),SCREEN_TOP,SCREEN_RIGHT+(SCREEN_CENTER_X*0.125),SCREEN_BOTTOM);
+		end"
+		OnCommand="glowshift;effectcolor1,1,1,1,0.125;effectcolor2,1,1,1,0.0875;effectperiod,8.25;"
+		/>
+</children></Layer>
+
+<!-- Particles time -->
+	<Layer Type="ActorFrame" InitCommand="%function(self)
+	--numParticles = 35; -- was 50
+	end" OnCommand="vertalign,bottom;x,SCREEN_LEFT;y,SCREEN_CENTER_Y;"><children>
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />
+		<Layer File="@'_particles/'..math.random(1,8)"
+			InitCommand="%function(self) ParticleCommandInit(self) end"
+			OnCommand="%function(self) ParticleCommandOn(self) end"
+			ResetCommand="%function(self) ParticleReset(self) end"
+			FloatCommand="%function(self) ParticleFloat(self) end" />		
+	</children></Layer>
+
+	<Layer File="_wipes/_down2up 1"
+		InitCommand="%function(self)
+		Center(self)
+		self:croptop(1)
+		self:blend('add')
+		end"
+		OnCommand="%function(self)
+			if math.random(512) == 276 then
+				self:queuecommand('Go');
+			end
+		end"
+		GoCommand="linear,wipeTime;croptop,0.8;linear,wipeTime;croptop,0.6;cropbottom,0.2;linear,wipeTime;croptop,0.4;cropbottom,0.4;linear,wipeTime;croptop,0.2;cropbottom,0.6;linear,wipeTime;croptop,0;cropbottom,0.8;linear,wipeTime;cropbottom,1;"
+		/>
+
+	<Layer File="@'_wipes/_left2right '..math.random(1,l2rWipes)"
+		InitCommand="%function(self)
+		Center(self)
+		self:croptop(1)
+		self:blend('add')
+		end"
+		OnCommand="%function(self)
+			if math.random(512) == 104 then
+				self:queuecommand('Go');
+			end
+		end"
+		GoCommand="linear,wipeTime;cropright,0.8;linear,wipeTime;cropright,0.6;cropleft,0.2;linear,wipeTime;cropright,0.4;cropleft,0.4;linear,wipeTime;cropright,0.2;cropleft,0.6;linear,wipeTime;cropright,0;cropleft,0.8;linear,wipeTime;cropleft,1;"
+		/>
+
+	<Layer File="@'_wipes/_right2left '..math.random(1,r2lWipes)"
+		InitCommand="%function(self)
+		Center(self)
+		self:croptop(1)
+		self:blend('add')
+		end"
+		OnCommand="%function(self)
+			if math.random(512) == 104 then
+				self:queuecommand('Go');
+			end
+		end"
+		GoCommand="linear,wipeTime;cropleft,0.8;linear,wipeTime;cropleft,0.6;cropright,0.2;linear,wipeTime;cropleft,0.4;cropright,0.4;linear,wipeTime;cropleft,0.2;cropright,0.6;linear,wipeTime;cropleft,0;cropright,0.8;linear,wipeTime;cropright,1;"
+		/>
+
+</children></ActorFrame>

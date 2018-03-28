@@ -1,0 +1,6 @@
+<ActorFrame><children>
+	<Layer Type="Quad"
+		InitCommand="%function(self) FullScreen(self) end"
+		OnCommand="diffuse,0,0,0,1;linear,0.15;diffusealpha,0"
+		/>
+</children></ActorFrame>

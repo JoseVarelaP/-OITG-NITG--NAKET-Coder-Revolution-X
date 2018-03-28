@@ -1,0 +1,49 @@
+<ActorFrame InitCommand="%function(self)
+glowTime = 2.5; -- was 5.5
+DiffuseQuad = {
+	HSVA(49,1,1,0.5),
+	HSVA(49,1,1,0.5),
+}
+end"
+OntoTheNextGameplayMessageCommand="y,1;vertalign,bottom;zoomto,SCREEN_WIDTH+3,40;diffuse,0,0,0,0.75"><children>
+
+<Layer Type="Quad" InitCommand="y,1;vertalign,bottom;zoomto,SCREEN_WIDTH+3,40;diffuse,0,0,0,0.75" />
+	
+	<Layer Type="ActorFrame" InitCommand="y,-40"><children>
+		<Layer Type="Quad" InitCommand="%function(self)
+		self:zoomto(SCREEN_WIDTH+3,2);
+		self:diffuse( DiffuseQuad[2][1],DiffuseQuad[2][2],DiffuseQuad[2][3],DiffuseQuad[2][4] );
+		end" />
+		<Layer Type="Quad" InitCommand="%function(self)
+		self:zoomto(SCREEN_WIDTH+3,2);
+		self:cropright(1);
+		self:diffuse( DiffuseQuad[1][1],DiffuseQuad[1][2],DiffuseQuad[1][3],DiffuseQuad[1][4] );
+		self:glow(1,1,1,0);
+		end"
+			OnCommand="queuecommand,Glow"
+			GlowCommand="accelerate,glowTime;glow,1,1,1,1;cropright,0;decelerate,glowTime;glow,1,1,1,0;cropleft,1;sleep,0.5;glow,1,1,1,0;cropright,1;cropleft,0;queuecommand,Glow;"
+			OffCommand="finishtweening;accelerate,0.5;glow,1,1,1,0;"
+			/>
+	</children></Layer>
+
+</children></ActorFrame>
+local glowTime = 2.5; -- was 5.5
+local t = Def.ActorFrame{
+	OntoTheNextGameplayMessageCommand=cmd(sleep,0.125;linear,0.375;addy,SCREEN_CENTER_Y);
+	Def.Quad{
+		InitCommand=cmd(y,1;vertalign,bottom;zoomto,SCREEN_WIDTH,40;diffuse,color("0,0,0,0.75"));
+	};
+	Def.ActorFrame{
+		InitCommand=cmd(y,-40);
+
+		Def.Quad{ InitCommand=cmd(zoomto,SCREEN_WIDTH,2;diffuse,HSVA(49,1,1,0.5)); };
+		Def.Quad{
+			InitCommand=cmd(zoomto,SCREEN_WIDTH,2;cropright,1;diffuse,HSVA(49,1,1,0.5);glow,color("1,1,1,0"));
+			OnCommand=cmd(queuecommand,"Glow");
+			GlowCommand=cmd(accelerate,glowTime;glow,color("1,1,1,1");cropright,0;decelerate,glowTime;glow,color("1,1,1,0");cropleft,1;sleep,0.5;glow,color("1,1,1,0");cropright,1;cropleft,0;queuecommand,"Glow");
+			OffCommand=cmd(finishtweening;accelerate,0.5;glow,color("1,1,1,0"););
+		};
+	};
+};
+
+return t;
