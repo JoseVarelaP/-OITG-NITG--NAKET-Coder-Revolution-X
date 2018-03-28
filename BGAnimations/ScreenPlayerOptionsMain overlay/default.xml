@@ -1,0 +1,186 @@
+<ActorFrame InitCommand="%function(self)
+song = GAMESTATE:GetCurrentSong();
+course = GAMESTATE:GetCurrentCourse();
+
+end" OnCommand="%function(self) Center(self) end"><children>
+	<!-- genre -->
+	<Layer Font="mentone/_24px"
+		Text="2"
+		InitCommand="y,-28;shadowlength,1;diffusealpha,0;zoomx,1000;maxwidth,SCREEN_WIDTH*0.8"
+		OnCommand="%function(self)
+				local genre = GAMESTATE:IsCourseMode() and ' ' or song:GetGenre();
+				if genre == '' then
+					self:skewx(-0.1);
+					genre = GetRandomGenre();
+				else
+					self:skewx(0);
+				end;
+				self:settext(genre);
+				self:queuecommand('Anim')
+			end"
+		AnimCommand="sleep,0.5;decelerate,0.5;diffusealpha,1;zoom,0.75"
+		OffCommand="decelerate,0.75;zoom,1.5;addy,-32;diffusealpha,0"	
+		/>
+
+	<!-- title -->
+	<Layer Font="scooter/_32px metal"
+		Text="@GAMESTATE:IsCourseMode() and course:GetDisplayFullTitle() or song:GetDisplayFullTitle()"
+		InitCommand="shadowlength,0;maxwidth,SCREEN_WIDTH*0.8;diffusealpha,0"
+		OnCommand="%function(self)
+				if self:GetText() == 'DVNO' then
+					self:diffuse( hex2rgb('#FFCC0000') );
+				else
+					self:diffuse( 1,1,1,0 );
+				end;
+				self:queuecommand('Anim')
+			end"
+		AnimCommand="sleep,0.5;decelerate,0.4;diffusealpha,1"
+		OffCommand="decelerate,0.75;zoom,2;diffusealpha,0"
+		/>
+
+	<!-- dube title (effect) -->
+	<Layer Font="scooter/_32px metal"
+		Text="@GAMESTATE:IsCourseMode() and course:GetDisplayFullTitle() or song:GetDisplayFullTitle()"
+		InitCommand="shadowlength,0;maxwidth,SCREEN_WIDTH*0.8;diffuse,0,0.9,1,1;blend,add"
+		OnCommand="queuecommand,Anim"
+		AnimCommand="diffusealpha,0;zoom,1;sleep,0.5;linear,0.05;diffusealpha,1;decelerate,0.4;zoom,1.5;diffusealpha,0.5;accelerate,0.1;zoomx,1000;zoomy,0.2;diffusealpha,0"
+		/>
+
+	<!-- artist -->
+	<Layer Font="mentone/_24px"
+		Text="@GAMESTATE:IsCourseMode() and course:GetEstimatedNumStages()..' stage(s)' or song:GetDisplayArtist()"
+		InitCommand="y,28;shadowlength,1;diffusealpha,0;zoomx,1000;maxwidth,SCREEN_WIDTH*0.8"
+		OnCommand="queuecommand,Anim"
+		AnimCommand="sleep,0.5;decelerate,0.5;diffusealpha,1;zoom,0.75"
+		OffCommand="decelerate,0.75;zoom,1.5;addy,32;diffusealpha,0"
+		/>
+</children></ActorFrame>
+
+local t = Def.ActorFrame{
+	Def.ActorFrame{
+		Name="SongInfo";
+		InitCommand=cmd(Center);
+
+	-- length section
+	Def.ActorFrame{
+		Name="LengthSection";
+		InitCommand=cmd(x,SCREEN_LEFT+4;y,SCREEN_CENTER_Y-48;horizalign,left;zoom,0.75);
+
+		Font("mentone", "24px")..{
+			Name="SongLength";
+			InitCommand=cmd(horizalign,left;shadowlength,1;diffuse,color("1,1,1,1"));
+			OnCommand=cmd(playcommand,"Set");
+			OffCommand=cmd(linear,0.2;diffusealpha,0);
+
+			SetCommand=function(self)
+				local song = GAMESTATE:GetCurrentSong()
+				local course = GAMESTATE:GetCurrentCourse()
+				if song or course then self:visible(true)
+				else self:visible(false); return;
+				end;
+
+				local time;
+				if song then time = song:MusicLengthSeconds() end
+				if course then
+					local st = GAMESTATE:GetCurrentStyle():GetStepsType();
+					time = course:GetTotalSeconds( st );
+				end;
+				if time then
+					local finalText = SecondsToMSSMsMs(time);
+					self:settext( string.sub(finalText, 0, string.len(finalText)-3) );
+				else
+					self:settext( "??:??" );
+				end
+
+				-- xxx todo: if song is long or marathon, color it as such
+				if not GAMESTATE:IsCourseMode() then
+					local text = self:GetText();
+					if song:IsLong() then
+						self:diffuse( SongLengthColors['Long'] );
+						self:settext( text .. " [2 stages]" );
+					elseif song:IsMarathon() then
+						self:diffuse( SongLengthColors['Marathon'] );
+						self:settext( text .. " [3 stages]" );
+					else
+						self:diffuse( SongLengthColors['Normal'] );
+					end;
+				end;
+			end;
+		};
+	};
+
+	-- bpm section
+	Def.ActorFrame{
+		Name="BPMSection";
+		InitCommand=cmd(x,SCREEN_RIGHT-40;y,SCREEN_CENTER_Y-48;horizalign,right;zoom,0.75);
+		
+		Def.BPMDisplay{
+			File=THEME:GetPathF("", "mentone/_24px");
+			Name="BPMDisplay";
+			InitCommand=cmd(x,-4;horizalign,right;shadowlength,1);
+			OnCommand=cmd(stoptweening;playcommand,"Set");
+			OffCommand=cmd(linear,0.2;diffusealpha,0);
+			SetCommand=function(self) self:SetFromGameState() end;
+		};
+		Font("mentone", "24px")..{
+			Name="BPMLabel";
+			Text="BPM";
+			InitCommand=cmd(horizalign,left;shadowlength,1;diffuse,color("1,1,1,1"));
+			OffCommand=cmd(linear,0.2;diffusealpha,0);
+		};
+	};
+};
+
+for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
+	t[#t+1] = Font("mentone","24px")..{
+		Name="PlayerOptionsText"..ToEnumShortString(pn);
+		InitCommand=function(self)
+			self:horizalign(pn == PLAYER_1 and left or right);
+			self:vertalign(bottom);
+			self:x( (pn == PLAYER_1 and SCREEN_WIDTH*0.05 or SCREEN_WIDTH*0.95) );
+			self:y(SCREEN_BOTTOM+64);
+			self:zoom(0.5);
+			self:shadowlength(1);
+			self:diffuse(PlayerColor(pn));
+		end;
+		BeginCommand=function(self)
+			-- load player mods whatever
+			self:settext(GAMESTATE:GetPlayerState(pn):GetPlayerOptions("ModsLevel_Preferred"));
+		end;
+		OnCommand=cmd(queuecommand,"Anim");
+		AnimCommand=cmd(bounceend,0.75;y,SCREEN_CENTER_Y+74);
+		OffCommand=cmd(linear,0.5;diffusealpha,0);
+	};
+	-- StepsDisplay
+	t[#t+1] = Def.StepsDisplay{
+		InitCommand=cmd(Load,"StepsDisplayOptions"..PlayerNumberToString(pn),GAMESTATE:GetPlayerState(pn));
+		OnCommand=function(self)
+			if GAMESTATE:IsHumanPlayer(pn) then
+				self:SetFromGameState(pn);
+				self:horizalign(pn == PLAYER_1 and left or right);
+				self:x( (pn == PLAYER_1 and SCREEN_WIDTH*0.01 or SCREEN_WIDTH*0.99) );
+				self:y(SCREEN_CENTER_Y*1.2);
+			end;
+		end;
+		OffCommand=function(self)
+			self:bouncebegin(1);
+			local dir = (pn == PLAYER_1) and -1 or 1;
+			self:addx(SCREEN_CENTER_X*dir);
+		end;
+		PlayerJoinedMessageCommand=function(self, params)
+			if params.Player == pn then
+				self:x( (pn == PLAYER_1 and -SCREEN_WIDTH*0.05 or SCREEN_WIDTH*1.05) );
+				self:bouncebegin(1);
+				self:x( (pn == PLAYER_1 and SCREEN_WIDTH*0.01 or SCREEN_WIDTH*0.99) );
+			end;
+		end;
+		PlayerUnjoinedMessageCommand=function(self, params)
+			if params.Player == pn then
+				self:bouncebegin(1);
+				self:x( (pn == PLAYER_1 and -SCREEN_WIDTH*0.05 or SCREEN_WIDTH*1.05) );
+			end;
+		end;
+	};
+end;
+
+return t;

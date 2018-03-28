@@ -1,0 +1,60 @@
+<!-- PlayerOptionsMain background: songbg + borders -->
+<ActorFrame><children>
+	<!-- song BG -->
+	<Layer File="songbackground"
+		InitCommand="%function(self) Center(self) self:diffuse(0,0,0,1) end"
+		OnCommand="%function(self)
+			if GAMESTATE:IsCourseMode() then
+				-- courses don't have backgrounds...
+				-- self:Load( THEME:GetPathG('Common fallback','background') );
+				local course = GAMESTATE:GetCurrentCourse();
+				if course then
+					local entry1 = course:GetCourseEntry(0);
+					local Path;
+					if entry1 then
+						Path = entry1:GetSong():GetBackgroundPath() or THEME:GetPathG('Common fallback','background')
+					else
+						Path = THEME:GetPathG('Common fallback','background')
+					end;
+					self:Load(Path);
+				end;
+			else
+				-- load from background
+				local song = GAMESTATE:GetCurrentSong();
+				if song then
+					local Path = song:GetBackgroundPath();
+					if not Path then Path = THEME:GetPathG('Common fallback','background'); end;
+					self:Load( Path );
+				end;
+			end;
+
+			-- stretch
+			scale_or_crop_background(self);
+
+			self:sleep(0.25);
+			self:decelerate(1);
+			self:diffuse( 1,1,1,1 );
+		end"
+		/>
+
+	<!-- top -->
+	<Layer Type="Quad"
+		InitCommand="x,SCREEN_CENTER_X;y,SCREEN_TOP;vertalign,top;zoomto,SCREEN_WIDTH,0;diffuse,0.75,0.75,0.75,1" 
+		OnCommand="linear,0.3;zoomto,SCREEN_WIDTH,SCREEN_CENTER_Y*0.75;sleep,0.3;decelerate,0.7;diffuse,0,0,0,0.5"
+		OffCommand="accelerate,1.5;addy,-SCREEN_HEIGHT"
+		/>
+
+	<!-- middle (???) -->
+	<Layer Type="Quad"
+		InitCommand="%function(self) self:zoomto(SCREEN_WIDTH,0) Center(self) self:diffuse(0,0,0,0) end"
+		OnCommand="linear,0.3;zoomto,SCREEN_WIDTH,SCREEN_CENTER_Y*0.5;sleep,0.3;decelerate,0.7;diffuse,0,0,0,0.8"
+		OffCommand="bouncebegin,0.75;zoomy,0"
+		/>
+
+	<!-- bot -->
+	<Layer Type="Quad"
+		InitCommand="x,SCREEN_CENTER_X;y,SCREEN_BOTTOM;vertalign,bottom;zoomto,SCREEN_WIDTH,0;diffuse,0.75,0.75,0.75,1"
+		OnCommand="linear,0.3;zoomto,SCREEN_WIDTH,SCREEN_CENTER_Y*0.75;sleep,0.3;decelerate,0.7;diffuse,0,0,0,0.5"
+		OffCommand="accelerate,1.5;addy,SCREEN_HEIGHT"
+		/>
+</children></ActorFrame>

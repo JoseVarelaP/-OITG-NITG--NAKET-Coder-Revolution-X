@@ -1,0 +1,113 @@
+-- PlayerOptionsMain background: songbg + borders
+<ActorFrame><children>
+	<!-- song BG -->
+	<Layer File="songbackground"
+		InitCommand="%function(self) Center(self) diffuse(0,0,0,1) end"
+		OnCommand="%function(self)
+			if GAMESTATE:IsCourseMode() then
+				-- courses don't have backgrounds...
+				--self:Load( THEME:GetPathG("Common fallback","background") );
+				local course = GAMESTATE:GetCurrentCourse();
+				if course then
+					local entry1 = course:GetCourseEntry(0);
+					local Path;
+					if entry1 then
+						Path = entry1:GetSong():GetBackgroundPath() or THEME:GetPathG('Common fallback','background')
+					else
+						Path = THEME:GetPathG('Common fallback','background')
+					end;
+					self:Load(Path);
+				end;
+			else
+				-- load from background
+				local song = GAMESTATE:GetCurrentSong();
+				if song then
+					local Path = song:GetBackgroundPath();
+					if not Path then Path = THEME:GetPathG('Common fallback','background'); end;
+					self:Load( Path );
+				end;
+			end;
+
+			-- stretch
+			-- self:scale_or_crop_background();
+
+			self:sleep(0.25);
+			self:decelerate(1);
+			self:diffuse( 1,1,1,1 );
+		end"
+		/>
+</children></ActorFrame>
+local t = Def.ActorFrame{
+	-- song BG
+	Def.Sprite{
+		InitCommand=cmd(Center;diffuse,color("0,0,0,1"));
+		OnCommand=function(self)
+			if GAMESTATE:IsCourseMode() then
+				-- courses don't have backgrounds...
+				--self:Load( THEME:GetPathG("Common fallback","background") );
+				local course = GAMESTATE:GetCurrentCourse();
+				if course then
+					local entry1 = course:GetCourseEntry(0);
+					local Path;
+					if entry1 then
+						Path = entry1:GetSong():GetBackgroundPath() or THEME:GetPathG("Common fallback","background")
+					else
+						Path = THEME:GetPathG("Common fallback","background")
+					end;
+					self:Load(Path);
+				end;
+			else
+				-- load from background
+				local song = GAMESTATE:GetCurrentSong();
+				if song then
+					local Path = song:GetBackgroundPath();
+					if not Path then Path = THEME:GetPathG("Common fallback","background"); end;
+					self:Load( Path );
+				end;
+			end;
+
+			-- stretch
+			self:scale_or_crop_background();
+
+			self:sleep(0.25);
+			self:decelerate(1);
+			self:diffuse( color("1,1,1,1") );
+		end;
+		OffCommand=function(self)
+			-- fade to the user's preferred brightness:
+			local prefBrightness = PREFSMAN:GetPreference('BGBrightness');
+			local diff = 1.0 - prefBrightness;
+			self:accelerate(1.5);
+			self:diffuse( color("0.5,0.5,0.5,".. diff) )
+		end;
+		OntoTheNextGameplayMessageCommand=function(self)
+			-- we're going to gameplay, bro; we need to make this prepared.
+			self:stoptweening();
+			self:accelerate(1.5);
+			self:diffuse( color("1,1,1,"..PREFSMAN:GetPreference('BGBrightness')) )
+		end;
+	};
+	-- top
+	Def.Quad{
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_TOP;vertalign,top;zoomto,SCREEN_WIDTH,0;diffuse,color("0.75,0.75,0.75,1"));
+		OnCommand=cmd(linear,0.3;zoomto,SCREEN_WIDTH,SCREEN_CENTER_Y*0.75;sleep,0.3;decelerate,0.7;diffuse,color("0,0,0,0.5"));
+		OffCommand=cmd(accelerate,1.5;addy,-SCREEN_HEIGHT);
+	};
+	-- middle (???)
+	Def.Quad{
+		InitCommand=cmd(Center;zoomto,SCREEN_WIDTH,0;diffuse,color("0,0,0,0"));
+		BeginCommand=function(self)
+			self:blend( SSC and 'BlendMode_Modulate' or 'BlendMode_WeightedMultiply' );
+		end;
+		OnCommand=cmd(linear,0.3;zoomto,SCREEN_WIDTH,SCREEN_CENTER_Y*0.5;sleep,0.3;decelerate,0.7;diffuse,color("0,0,0,0.75"));
+		OffCommand=cmd(bouncebegin,0.75;zoomy,0);
+	};
+	-- bot
+	Def.Quad{
+		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_BOTTOM;vertalign,bottom;zoomto,SCREEN_WIDTH,0;diffuse,color("0.75,0.75,0.75,1"));
+		OnCommand=cmd(linear,0.3;zoomto,SCREEN_WIDTH,SCREEN_CENTER_Y*0.75;sleep,0.3;decelerate,0.7;diffuse,color("0,0,0,0.5"));
+		OffCommand=cmd(accelerate,1.5;addy,SCREEN_HEIGHT);
+	};
+};
+
+return t;

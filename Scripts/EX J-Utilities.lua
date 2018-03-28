@@ -10,6 +10,14 @@ function Center(self)
 	self:y(SCREEN_CENTER_Y)
 end
 
+function scale_or_crop_background(self)
+	if self:GetWidth() == 640 and self:GetHeight() == 480 then
+		self:stretchto( 0,0,SCREEN_WIDTH,SCREEN_HEIGHT );
+	else
+		self:scaletocover( 0,0,SCREEN_WIDTH,SCREEN_HEIGHT );
+	end
+end
+
 function ThemeFile( file ) return THEME:GetPath( EC_GRAPHICS, '' , file ) end
 
 function ColCon(n1, n2, n3)
