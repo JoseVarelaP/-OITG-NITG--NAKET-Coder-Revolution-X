@@ -37,65 +37,45 @@ end"><children>
 			LoseFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;diffusealpha,0"
 			/>
 
-		<Layer File="ScreenSelectGameMode scrollchoice/_text normal"
-			OnCommand="y,64*2"
+		<Layer File="ScreenSelectGameMode scrollchoice/_text extra"
+			OnCommand="y,68*2"
 			GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;diffusealpha,1"
 			LoseFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;diffusealpha,0.5"
 			/>
 
-	<Layer File="_preview shading" OnCommand="zoomy,1.1;y,-0.1" />
-	<Layer File="_preview grid" OnCommand="blend,add;diffusealpha,0.2;fadetop,0.5;fadebottom,0.5" />
+	<Layer File="ScreenSelectGameMode scrollchoice/_preview shading" OnCommand="zoomy,1.3;y,-0.1" />
+	<Layer File="ScreenSelectGameMode scrollchoice/_preview grid" OnCommand="blend,add;diffusealpha,0.2;fadetop,0.5;fadebottom,0.5" />
 
 		<Layer Type="ActorFrame"
-		GainFocusCommand="stoptweening;spin;effectmagnitude,0,-15,-15"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;rotationy,0;rotationz,0"
-		OffFocusedCommand="playcommand,Fade"
+		OnCommand="spin;effectmagnitude,0,0,15"
+		OffFocusedCommand="playcommandonleaves,Fade"
 		FadeCommand="sleep,0.6;linear,0.375;diffusealpha,0"
+		GainFocusCommand="effectmagnitude,0,0,45"
+		LoseFocusCommand="effectmagnitude,0,0,15"
 			><children>
 
 		<Layer File="ScreenSelectGameMode scrollchoice/_normal arrow"
-		OnCommand="%function(self)
-		self:x(-16);
-		self:y(4);
-		self:z(3);
-		self:diffuse( HSVATable[1][1],HSVATable[1][2],HSVATable[1][3],HSVATable[1][4] );
-		end"
-		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,1;pulse;effectmagnitude,0.5,0.75,1"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.5;"
+		OnCommand="y,32;diffusealpha,0.75"
+		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.8;y,32"
+		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.6;y,20"
 			/>
 
 		<Layer File="ScreenSelectGameMode scrollchoice/_normal arrow"
-		OnCommand="%function(self)
-		self:x(16);
-		self:y(4);
-		self:z(3);
-		self:diffuse( HSVATable[2][1],HSVATable[2][2],HSVATable[2][3],HSVATable[2][4] );
-		end"
-		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,1;pulse;effectmagnitude,0.6,0.8,1;effectoffset,1"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.6;"
+		OnCommand="y,-32;rotationz,180;diffusealpha,0.75"
+		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.8;y,-32"
+		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.6;y,-20"
 			/>
 
 		<Layer File="ScreenSelectGameMode scrollchoice/_normal arrow"
-		OnCommand="%function(self)
-		self:x(16);
-		self:y(4);
-		self:z(3);
-		self:diffuse( HSVATable[3][1],HSVATable[3][2],HSVATable[3][3],HSVATable[3][4] );
-		end"
-		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,1;pulse;effectmagnitude,0.7,0.9,1;effectoffset,2"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.7;"
+		OnCommand="x,32;rotationz,-90;diffusealpha,0.75"
+		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.8;x,32"
+		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.6;x,20"
 			/>
 
 		<Layer File="ScreenSelectGameMode scrollchoice/_normal arrow"
-		OnCommand="z,0;blend,add"
-		GainFocusCommand="%function(self)
-		self:stoptweening();
-		self:diffusealpha(1);
-		self:diffuseshift();
-		self:effectcolor1( HSVATable[4][1],HSVATable[4][2],HSVATable[4][3],HSVATable[4][4] );
-		self:effectcolor2( HSVATable[5][1],HSVATable[5][2],HSVATable[5][3],HSVATable[5][4] );
-		end"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.7;"
+		OnCommand="x,-32;rotationz,90;diffusealpha,0.75"
+		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.8;x,-32"
+		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.6;x,-20"
 			/>
 
 		</children></Layer>

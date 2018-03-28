@@ -1,17 +1,7 @@
 <ActorFrame InitCommand="%function(self)
 tweenTimeBetweenItems = 0.0725;
 
-previewBaseSize = { x = 120, y = 108 };
 previewYOffset = -76; -- was -78
-
-HSVATable = {
-	HSVA(0,1,0.8,0.75),
-	HSVA(128,1,0.8,0.75),
-	HSVA(192,1,0.8,0.75),
-	--
-	HSVA(0,0,0.65,1),
-	HSVA(0,0,1,0.625),
-};
 end"><children>
 
 	<Layer Type="ActorFrame" OnCommand="y,previewYOffset;fov,90"><children>
@@ -37,71 +27,69 @@ end"><children>
 			LoseFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;diffusealpha,0"
 			/>
 
-		<Layer File="ScreenSelectGameMode scrollchoice/_text normal"
+		<Layer File="ScreenSelectGameMode scrollchoice/_text online"
 			OnCommand="y,64*2"
 			GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;diffusealpha,1"
 			LoseFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;diffusealpha,0.5"
 			/>
 
-	<Layer File="_preview shading" OnCommand="zoomy,1.1;y,-0.1" />
-	<Layer File="_preview grid" OnCommand="blend,add;diffusealpha,0.2;fadetop,0.5;fadebottom,0.5" />
+	<Layer File="ScreenSelectGameMode scrollchoice/_preview shading" OnCommand="zoomy,1.3;y,-0.1" />
+	<Layer File="ScreenSelectGameMode scrollchoice/_preview grid" OnCommand="blend,add;diffusealpha,0.2;fadetop,0.5;fadebottom,0.5" />
 
-		<Layer Type="ActorFrame"
-		GainFocusCommand="stoptweening;spin;effectmagnitude,0,-15,-15"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;rotationy,0;rotationz,0"
-		OffFocusedCommand="playcommand,Fade"
-		FadeCommand="sleep,0.6;linear,0.375;diffusealpha,0"
-			><children>
+			<Layer Type="ActorFrame" OnCommand="y,-32"><children>
+	
+	<Layer Type="Quad"
+	OnCommand="%function(self)
+	self:zoomto( 120,15 );
+	self:diffuse( 1,1,0,0.5 );
+	end"
+	GainFocusCommand="%function(self)
+	self:accelerate( tweenTimeBetweenItems );
+	self:diffuse( 1,1,0,0.9 );
+	end"
+	LoseFocusCommand="%function(self)
+	self:accelerate( tweenTimeBetweenItems );
+	self:diffuse( 1,1,0,0.5 );
+	end" />
 
-		<Layer File="ScreenSelectGameMode scrollchoice/_normal arrow"
-		OnCommand="%function(self)
-		self:x(-16);
-		self:y(4);
-		self:z(3);
-		self:diffuse( HSVATable[1][1],HSVATable[1][2],HSVATable[1][3],HSVATable[1][4] );
-		end"
-		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,1;pulse;effectmagnitude,0.5,0.75,1"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.5;"
-			/>
+	<Layer File="ScreenSelectGameMode scrollchoice/_construction stripe"
+			OnCommand="zoomx,1.875;customtexturerect,0,0,2,1"
+			GainFocusCommand="texcoordvelocity,0.2,0"
+			LoseFocusCommand="stoptweening;texcoordvelocity,0,0"
+		/>
+			</children></Layer>
 
-		<Layer File="ScreenSelectGameMode scrollchoice/_normal arrow"
-		OnCommand="%function(self)
-		self:x(16);
-		self:y(4);
-		self:z(3);
-		self:diffuse( HSVATable[2][1],HSVATable[2][2],HSVATable[2][3],HSVATable[2][4] );
-		end"
-		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,1;pulse;effectmagnitude,0.6,0.8,1;effectoffset,1"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.6;"
-			/>
+			<Layer Type="ActorFrame" OnCommand="y,32"><children>
+	
+	<Layer Type="Quad"
+	OnCommand="%function(self)
+	self:zoomto( 120,15 );
+	self:diffuse( 1,1,0,0.5 );
+	end"
+	GainFocusCommand="%function(self)
+	self:accelerate( tweenTimeBetweenItems );
+	self:diffuse( 1,1,0,0.9 );
+	end"
+	LoseFocusCommand="%function(self)
+	self:accelerate( tweenTimeBetweenItems );
+	self:diffuse( 1,1,0,0.5 );
+	end" />
 
-		<Layer File="ScreenSelectGameMode scrollchoice/_normal arrow"
-		OnCommand="%function(self)
-		self:x(16);
-		self:y(4);
-		self:z(3);
-		self:diffuse( HSVATable[3][1],HSVATable[3][2],HSVATable[3][3],HSVATable[3][4] );
-		end"
-		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;zoom,1;pulse;effectmagnitude,0.7,0.9,1;effectoffset,2"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.7;"
-			/>
+	<Layer File="ScreenSelectGameMode scrollchoice/_construction stripe"
+			OnCommand="zoomx,1.875;customtexturerect,0,0,2,1"
+			GainFocusCommand="texcoordvelocity,0.2,0"
+			LoseFocusCommand="stoptweening;texcoordvelocity,0,0"
+		/>
+			</children></Layer>
 
-		<Layer File="ScreenSelectGameMode scrollchoice/_normal arrow"
-		OnCommand="z,0;blend,add"
-		GainFocusCommand="%function(self)
-		self:stoptweening();
-		self:diffusealpha(1);
-		self:diffuseshift();
-		self:effectcolor1( HSVATable[4][1],HSVATable[4][2],HSVATable[4][3],HSVATable[4][4] );
-		self:effectcolor2( HSVATable[5][1],HSVATable[5][2],HSVATable[5][3],HSVATable[5][4] );
-		end"
-		LoseFocusCommand="stopeffect;stoptweening;accelerate,tweenTimeBetweenItems;zoom,0.7;"
-			/>
+	<Layer File="ScreenSelectGameMode scrollchoice/_preview msgline" OnCommand="y,8" />
+	<Layer File="ScreenSelectGameMode scrollchoice/_construction shadow" OnCommand="y,-8;blend,add;diffusealpha,0.375"
+		GainFocusCommand="stoptweening;pulse;effectmagnitude,0.8,0.975,1;"
+		LoseFocusCommand="stoptweening;stopeffect;accelerate,0.1;zoom,1"
+		/>
 
-		</children></Layer>
+	<Layer File="ScreenSelectGameMode scrollchoice/_construction main" OnCommand="y,-8" />
 
 	</children></Layer>
-
-</children></ActorFrame>
 
 </children></ActorFrame>
