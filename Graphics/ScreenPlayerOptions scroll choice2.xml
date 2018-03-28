@@ -1,0 +1,75 @@
+<!-- local cIndex = Var("GameCommand"):GetIndex();
+local cName = Var("GameCommand"):GetName();
+local cText = THEME:GetString( Var "LoadingScreen", cName );
+local cDesc = THEME:GetString( Var "LoadingScreen", cName .. "Desc" );
+
+local mainBoxSize = WideScale(SCREEN_CENTER_X*0.425,SCREEN_CENTER_X*0.4); -->
+
+<ActorFrame InitCommand="%function(self)
+HSVATable = {
+	HSVA(48,0.75,0.9,1),
+	HSVA(48,0.0,0.8,0.75),
+}
+end"><children>
+	<Layer File="_shared elements/RoundedCornerBox"
+		GainFocusCommand="%function(self)
+		self:stoptweening()
+		self:accelerate(0.5)
+		self:diffuse( HSVATable[1][1],HSVATable[1][2],HSVATable[1][3],HSVATable[1][4] )
+		end"
+		LoseFocusCommand="%function(self)
+		self:stoptweening()
+		self:decelerate(0.5)
+		self:diffuse( HSVATable[2][1],HSVATable[2][2],HSVATable[2][3],HSVATable[2][4] )
+		end"
+		/>
+
+	<Layer Font="scooter/_32px metal"
+		Text="Song Options"
+		InitCommand="y,-16;shadowlength,0;maxwidth,(180*0.9375)"
+		GainFocusCommand="stoptweening;accelerate,0.25;diffuse,1,0.8,0,1"
+		LoseFocusCommand="stoptweening;decelerate,0.25;diffuse,1,1,1,1"
+		/>
+
+	<Layer Font="handelgothic/_20px"
+		Text="(Song rate, etc.)"
+		InitCommand="zoom,0.6;shadowlength,1;y,20;maxwidth,(250*0.9375)"
+		/>
+	
+</children></ActorFrame>
+
+<!-- local i = Def.ActorFrame{
+	OffUnfocusedCommand=cmd(bouncebegin,0.325;zoomy,0);
+
+	-- main bg
+	LoadActor( THEME:GetPathG("_shared","elements/RoundedCornerBox"),mainBoxSize, mainBoxSize*0.5 )..{
+		GainFocusCommand=cmd(stoptweening;accelerate,0.5;diffuse,HSVA(48,0.75,0.9,1));
+		LoseFocusCommand=cmd(stoptweening;decelerate,0.5;diffuse,HSVA(48,0.0,0.8,0.75));
+	};
+
+	--Font("sf theramin gothic", "24pt")..{
+	--Font("scooter", "32px metal")..{
+	Font("sf willamette extended", "32px chrome")..{
+		Text=cText;
+		InitCommand=cmd(y,-16;shadowlength,0;maxwidth,(mainBoxSize*0.9375));
+		GainFocusCommand=cmd(stoptweening;accelerate,0.25;diffuse,color("1,0.8,0,1"));
+		LoseFocusCommand=cmd(stoptweening;decelerate,0.25;diffuse,color("1,1,1,1"));
+	};
+
+	Font("handelgothic", "20px")..{
+		Text=cDesc;
+		InitCommand=cmd(zoom,0.6;shadowlength,1;y,20;wrapwidthpixels,(mainBoxSize*0.9375)*2;maxheight,64;shadowcolor,color("0,0,0,0.75"));
+	};
+
+	-- hack to make headers go up on going to gameplay
+	Def.Actor{
+		Name="TransitionBroker";
+		OffFocusedCommand=function(self)
+			if cName == "PlaySong" then
+				MESSAGEMAN:Broadcast("OntoTheNextGameplay"); -- windeu
+			end;
+		end;
+	};
+};
+
+return i; -->

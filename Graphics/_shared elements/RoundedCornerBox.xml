@@ -1,26 +1,21 @@
-<ActorFrame InitCommand="%function(self)
-Width = 120;
-Height = 130;
+<ActorFrame
+OnCommand="%function(self)
 Color = 0;
-assert(Width);
-assert(Height);
-DefaultColor = 0,0,0,1
---[[
-How it's drawn:
-  c----c
-  OOOOOO
-  c----c
-
----- is 8px tall and Width-8 wide. y = (Height/2), flip the bit.
-OOOO is Height-8px tall and Width wide.
-c's x position is Width - 4, flip the bit if needed.
---]]
-
--- Color is optional.
-if not Color then Color = DefaultColor end;
-
 EdgeWidth = Width-8;
 EdgePosY = (Height/2);
+
+if not EdgeWidth then
+	EdgeWidth = Width-8;
+end
+if not EdgePosY then
+	EdgePosY = (Height/2);
+end
+if not Width or Width == 0 then
+	Width = 160;
+end
+if not Height or Height == 0 then
+	Height = 120;
+end
 CornerPosX = ((Width/2)-4);
 end"><children>
 	<Layer Type="Quad" OnCommand="zoomto,EdgeWidth-8,8;y,-EdgePosY" />

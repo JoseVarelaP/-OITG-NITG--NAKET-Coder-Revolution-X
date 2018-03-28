@@ -2,7 +2,8 @@
 song = GAMESTATE:GetCurrentSong();
 course = GAMESTATE:GetCurrentCourse();
 
-end" OnCommand="%function(self) Center(self) end"><children>
+end"><children>
+<Layer Type="ActorFrame" OnCommand="%function(self) Center(self) end"><children>
 	<!-- genre -->
 	<Layer Font="mentone/_24px"
 		Text="2"
@@ -11,7 +12,7 @@ end" OnCommand="%function(self) Center(self) end"><children>
 				local genre = GAMESTATE:IsCourseMode() and ' ' or song:GetGenre();
 				if genre == '' then
 					self:skewx(-0.1);
-					genre = GetRandomGenre();
+					genre = 'No genre';
 				else
 					self:skewx(0);
 				end;
@@ -54,82 +55,70 @@ end" OnCommand="%function(self) Center(self) end"><children>
 		AnimCommand="sleep,0.5;decelerate,0.5;diffusealpha,1;zoom,0.75"
 		OffCommand="decelerate,0.75;zoom,1.5;addy,32;diffusealpha,0"
 		/>
-</children></ActorFrame>
+</children></Layer>
 
-local t = Def.ActorFrame{
-	Def.ActorFrame{
-		Name="SongInfo";
-		InitCommand=cmd(Center);
-
-	-- length section
-	Def.ActorFrame{
-		Name="LengthSection";
-		InitCommand=cmd(x,SCREEN_LEFT+4;y,SCREEN_CENTER_Y-48;horizalign,left;zoom,0.75);
-
-		Font("mentone", "24px")..{
-			Name="SongLength";
-			InitCommand=cmd(horizalign,left;shadowlength,1;diffuse,color("1,1,1,1"));
-			OnCommand=cmd(playcommand,"Set");
-			OffCommand=cmd(linear,0.2;diffusealpha,0);
-
-			SetCommand=function(self)
+<!-- length section -->
+<Layer Type="ActorFrame" OnCommand="x,SCREEN_LEFT+4;y,SCREEN_CENTER_Y-48;horizalign,left;zoom,0.75"><children>
+	<Layer Font="mentone/_24px"
+		Text="SongLength"
+		InitCommand="horizalign,left;shadowlength,1;"
+		OnCommand="queuecommand,Set"
+		SetCommand="%function(self)
 				local song = GAMESTATE:GetCurrentSong()
 				local course = GAMESTATE:GetCurrentCourse()
-				if song or course then self:visible(true)
-				else self:visible(false); return;
-				end;
+				if song or course then self:hidden(0)
+				else self:hidden(1); return;
+				end
 
 				local time;
 				if song then time = song:MusicLengthSeconds() end
 				if course then
 					local st = GAMESTATE:GetCurrentStyle():GetStepsType();
 					time = course:GetTotalSeconds( st );
-				end;
+				end
+
 				if time then
 					local finalText = SecondsToMSSMsMs(time);
 					self:settext( string.sub(finalText, 0, string.len(finalText)-3) );
 				else
-					self:settext( "??:??" );
+					self:settext( '??:??' );
 				end
 
 				-- xxx todo: if song is long or marathon, color it as such
 				if not GAMESTATE:IsCourseMode() then
 					local text = self:GetText();
 					if song:IsLong() then
-						self:diffuse( SongLengthColors['Long'] );
-						self:settext( text .. " [2 stages]" );
+						self:diffuse( 0,1,0,1 );
+						self:settext( text .. '[2 stages]' );
 					elseif song:IsMarathon() then
-						self:diffuse( SongLengthColors['Marathon'] );
-						self:settext( text .. " [3 stages]" );
+						self:diffuse( 255/255,136/255,0,1 );
+						self:settext( text .. '[3 stages]' );
 					else
-						self:diffuse( SongLengthColors['Normal'] );
-					end;
-				end;
-			end;
-		};
-	};
+						self:diffuse( 1,1,1,1 );
+					end
+				end
+			end"
+		OffCommand="linear,0.2;diffusealpha,0"
+		/>
+	</children></Layer>
 
-	-- bpm section
-	Def.ActorFrame{
-		Name="BPMSection";
-		InitCommand=cmd(x,SCREEN_RIGHT-40;y,SCREEN_CENTER_Y-48;horizalign,right;zoom,0.75);
-		
-		Def.BPMDisplay{
-			File=THEME:GetPathF("", "mentone/_24px");
-			Name="BPMDisplay";
-			InitCommand=cmd(x,-4;horizalign,right;shadowlength,1);
-			OnCommand=cmd(stoptweening;playcommand,"Set");
-			OffCommand=cmd(linear,0.2;diffusealpha,0);
-			SetCommand=function(self) self:SetFromGameState() end;
-		};
-		Font("mentone", "24px")..{
-			Name="BPMLabel";
-			Text="BPM";
-			InitCommand=cmd(horizalign,left;shadowlength,1;diffuse,color("1,1,1,1"));
-			OffCommand=cmd(linear,0.2;diffusealpha,0);
-		};
-	};
-};
+<!-- bpm section -->
+<Layer Type="ActorFrame" OnCommand="x,SCREEN_RIGHT-40;y,SCREEN_CENTER_Y-48;horizalign,right;zoom,0.75"><children>
+	<Layer Font="mentone/_24px"
+		Text="BPMDisplay"
+		InitCommand="x,-4;horizalign,right;shadowlength,1"
+		OnCommand="stoptweening;queuecommand,Set"
+		SetCommand="%function(self) self:settext( GAMESTATE:GetCurBPS()*60 ) end"
+		OffCommand="linear,0.2;diffusealpha,0"
+		/>
+
+	<Layer Font="mentone/_24px"
+		Text="BPM"
+		InitCommand="horizalign,left;shadowlength,1;"
+		OffCommand="linear,0.2;diffusealpha,0"
+		/>
+	</children></Layer>
+</children></ActorFrame>
 
 for pn in ivalues(GAMESTATE:GetHumanPlayers()) do
 	t[#t+1] = Font("mentone","24px")..{

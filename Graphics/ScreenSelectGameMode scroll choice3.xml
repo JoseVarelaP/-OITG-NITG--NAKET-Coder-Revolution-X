@@ -7,10 +7,12 @@ end"><children>
 	<Layer Type="ActorFrame" OnCommand="y,previewYOffset;fov,90"><children>
 
 		<Layer File="_shared elements/RoundedCornerBox"
-		OnCommand="%function(self)
+		InitCommand="%function(self)
 		self:x( 0 )
 		self:y( 0 )
 		self:diffuse(0.6,0.6,0.6,1)
+		Width = 120;
+		Height = 130;
 		end"
 		GainFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;diffusealpha,1"
 		LoseFocusCommand="stoptweening;accelerate,tweenTimeBetweenItems;diffusealpha,0.5"

@@ -40,21 +40,21 @@
 	<!-- top -->
 	<Layer Type="Quad"
 		InitCommand="x,SCREEN_CENTER_X;y,SCREEN_TOP;vertalign,top;zoomto,SCREEN_WIDTH,0;diffuse,0.75,0.75,0.75,1" 
-		OnCommand="linear,0.3;zoomto,SCREEN_WIDTH,SCREEN_CENTER_Y*0.75;sleep,0.3;decelerate,0.7;diffuse,0,0,0,0.5"
+		OnCommand="linear,0.3;zoomto,SCREEN_WIDTH+3,SCREEN_CENTER_Y*0.75;sleep,0.3;decelerate,0.7;diffuse,0,0,0,0.5"
 		OffCommand="accelerate,1.5;addy,-SCREEN_HEIGHT"
 		/>
 
 	<!-- middle (???) -->
 	<Layer Type="Quad"
 		InitCommand="%function(self) self:zoomto(SCREEN_WIDTH,0) Center(self) self:diffuse(0,0,0,0) end"
-		OnCommand="linear,0.3;zoomto,SCREEN_WIDTH,SCREEN_CENTER_Y*0.5;sleep,0.3;decelerate,0.7;diffuse,0,0,0,0.8"
+		OnCommand="linear,0.3;zoomto,SCREEN_WIDTH+3,SCREEN_CENTER_Y*0.5;sleep,0.3;decelerate,0.7;diffuse,0,0,0,0.8"
 		OffCommand="bouncebegin,0.75;zoomy,0"
 		/>
 
 	<!-- bot -->
 	<Layer Type="Quad"
 		InitCommand="x,SCREEN_CENTER_X;y,SCREEN_BOTTOM;vertalign,bottom;zoomto,SCREEN_WIDTH,0;diffuse,0.75,0.75,0.75,1"
-		OnCommand="linear,0.3;zoomto,SCREEN_WIDTH,SCREEN_CENTER_Y*0.75;sleep,0.3;decelerate,0.7;diffuse,0,0,0,0.5"
+		OnCommand="linear,0.3;zoomto,SCREEN_WIDTH+3,SCREEN_CENTER_Y*0.75;sleep,0.3;decelerate,0.7;diffuse,0,0,0,0.5"
 		OffCommand="accelerate,1.5;addy,SCREEN_HEIGHT"
 		/>
 </children></ActorFrame>
