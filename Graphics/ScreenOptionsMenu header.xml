@@ -1,0 +1,4 @@
+<ActorFrame><children>
+	<Layer File="ScreenWithMenuElements header" OnCommand="%function(self) HeaderText = 'Options' end" />
+</children></ActorFrame>
+	

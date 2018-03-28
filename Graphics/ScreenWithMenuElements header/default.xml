@@ -23,7 +23,16 @@ OntoTheNextGameplayMessageCommand="sleep,0.125;linear,0.375;addy,-SCREEN_CENTER_
 	<Layer Font="mentone/_24px"
 		Text="Test dialog"
 		InitCommand="x,WideScale(-(SCREEN_CENTER_X*0.925),-(SCREEN_CENTER_X*0.8));y,-25;maxwidth,WideScale(SCREEN_CENTER_X,SCREEN_CENTER_X-68);skewx,-0.2;zoom,0.8;horizalign,left;shadowlength,0;"
-		OnCommand="linear,0.25;y,-5"
+		OnCommand="%function(self)
+		self:linear(0.25);
+		self:y(-5)
+
+		if HeaderText == nil then
+			self:settext(' ')
+		else
+			self:settext( HeaderText )
+		end
+		end"
 		OffCommand="linear,0.5;y,-48"
 		/>
 </children></ActorFrame>
