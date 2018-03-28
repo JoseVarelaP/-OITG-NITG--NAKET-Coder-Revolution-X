@@ -13,6 +13,9 @@
 		self:shadowlength(0)
 		self:diffusealpha(0)
 		end"
-		OnCommand="sleep,0.75;linear,0.25;diffusealpha,1;sleep,0.125;accelerate,0.25;diffuse,0,0,0,1;decelerate,0.125;diffusealpha,0;"
+		OnCommand="sleep,0.75;linear,0.25;diffusealpha,1;sleep,0.125;accelerate,0.25;diffuse,0,0,0,1;decelerate,0.125;diffusealpha,0;queuecommand,LoadNewScreen"
+		LoadNewScreenCommand="%function(self)
+		SCREENMAN:SetNewScreen('ScreenSelectGameMode')
+		end"
 		/>
 </children></ActorFrame>
