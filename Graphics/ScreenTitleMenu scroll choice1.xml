@@ -50,11 +50,6 @@ end"><children>
 		InitCommand="z,0;y,100;zoomto,163,VertHeight;texcoordvelocity,0,0.25;rotationx,-90"
 		/>
 
-		<!-- floor shadow? -->
-		<!-- <Layer File="_tex" 
-		InitCommand="z,0;y,100;zoomto,163,VertHeight;rotationx,-90;diffuse,0,0,0,1;diffusealpha,0.75;fadebottom,0.5"
-		/> -->
-
 		<!-- left side -->
 		<Layer File="_tex" 
 		InitCommand="x,-86;y,-1;z,-33;zoomto,244,VertHeight*0.9125;texcoordvelocity,-0.25,0;rotationy,-90"
