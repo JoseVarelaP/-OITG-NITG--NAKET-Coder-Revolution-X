@@ -1,0 +1,4 @@
+<ActorFrame><children>
+	<Layer File="ScreenWithMenuElements header" OnCommand="%function(self) HeaderText = 'Select Music' end" />
+</children></ActorFrame>
+	
