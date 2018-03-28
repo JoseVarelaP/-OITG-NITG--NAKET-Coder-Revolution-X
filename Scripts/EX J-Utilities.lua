@@ -10,6 +10,22 @@ function Center(self)
 	self:y(SCREEN_CENTER_Y)
 end
 
+function JudgmentTween(self)
+	self:diffusealpha(1);
+	self:zoom(1.3-0.3);
+	self:accelerate(0.125);
+	self:zoom(1.0-0.3);
+	self:sleep(0.8);
+	self:linear(0.1);
+	self:diffusealpha(0);
+end
+
+function ComboTween(self)
+	self:glow(1,1,1,0.5);
+	self:linear(0.07);
+	self:glow(1,1,1,0)
+end
+
 function scale_or_crop_background(self)
 	if self:GetWidth() == 640 and self:GetHeight() == 480 then
 		self:stretchto( 0,0,SCREEN_WIDTH,SCREEN_HEIGHT );
@@ -22,6 +38,14 @@ function ThemeFile( file ) return THEME:GetPath( EC_GRAPHICS, '' , file ) end
 
 function ColCon(n1, n2, n3)
 	return (n1/255),(n2/255),(n3/255),1
+end
+
+function PlayModeCheck()
+	if GAMESTATE:IsPlayerEnabled(PLAYER_1) and GAMESTATE:IsPlayerEnabled(PLAYER_2) then
+		return 'versus'
+	else
+		return 'single'
+	end
 end
 
 -- I don't think this works right:

@@ -89,10 +89,10 @@ end"><children>
 					local text = self:GetText();
 					if song:IsLong() then
 						self:diffuse( 0,1,0,1 );
-						self:settext( text .. '[2 stages]' );
+						self:settext( text .. ' [2 stages]' );
 					elseif song:IsMarathon() then
 						self:diffuse( 255/255,136/255,0,1 );
-						self:settext( text .. '[3 stages]' );
+						self:settext( text .. ' [3 stages]' );
 					else
 						self:diffuse( 1,1,1,1 );
 					end
