@@ -1,0 +1,87 @@
+<ActorFrame><children>
+	<Layer File="LifeMeterText.xml" OnCommand="x,SCREEN_WIDTH*0.05;y,SCREEN_TOP-64;bounceend,0.75;y,SCREEN_TOP+32" 
+		OffCommand="%function(self)
+			self:bounceend(0.5);
+			-- center1P and 1P only: go up
+			-- not center1P: go left or right per player
+			if PREFSMAN:GetPreference('Center1Player') and GAMESTATE:GetNumPlayersEnabled() == 1 then
+				self:y(SCREEN_TOP+64);
+			else
+				local mul = pn == PLAYER_1 and 1 or -1
+				self:addx((SCREEN_CENTER_X)*mul);
+			end;
+		end"
+		/>
+
+	<Layer Type="ActorFrame"
+		OnCommand="x,SCREEN_CENTER_X;y,SCREEN_TOP+14"
+		> <children>
+
+		<Layer
+			File="under meter frame"
+			OnCommand="%function(self)
+			self:zoom(2)
+			self:addy(-5)
+
+		end"/>
+
+		<Layer
+			Type="SongMeterDisplay"
+			StreamWidth="800"
+			StreamPath="meter stream"
+			OnCommand="zoomy,0.5;y,-8"
+		>
+			<Tip
+				Font="mentone/_24px"
+			Text="0"
+			OnCommand="zoom,0.5;y,20;zoomy,1;queuecommand,Update"
+			UpdateCommand="%function(self)
+			secs = ''
+			maxSecs = ''
+	
+			if SSC then
+				secs = math.max(GAMESTATE:GetCurMusicSeconds(),0);
+			elseif FUCK_EXE then
+				secs = GAMESTATE:GetSongTime()
+			-- todo: figure out who's alive instead of risking
+			-- 'hey this doesn't work' reports when the master
+			-- player bombs out for some reason.
+				secs = ' '
+			end
+			local song = GAMESTATE:GetCurrentSong();
+			if GAMESTATE:IsCourseMode() then
+				local course = GAMESTATE:GetCurrentCourse();
+				if course then
+					local songEntry = course:GetCourseEntry( GAMESTATE:GetCourseSongIndex() );
+					song = songEntry:GetSong()
+				end
+			end
+			if song then
+				if SSC then
+					maxSecs = song:GetStepsSeconds();
+				else
+					maxSecs = song:MusicLengthSeconds();
+				end
+			else
+				maxSecs = -1;
+			end
+			self:settext( SecondsToMMSS(GAMESTATE:GetSongTime()) );
+
+			self:sleep(1/60)
+			self:queuecommand('Update')
+			end"
+			/>
+
+		</Layer>
+
+		<Layer File="meter frame" OnCommand="%function(self)
+		self:zoom(2)
+		self:addy(-5)
+
+		end" />
+
+
+	</children> </Layer>
+
+</children></ActorFrame>
+<!-- paused is not used -->

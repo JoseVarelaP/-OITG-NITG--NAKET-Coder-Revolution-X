@@ -1,0 +1,44 @@
+<ActorFrame InitCommand="%function(self)
+--[[
+LifeMeterText: part 1 of 2 of the new NCRX life meter,
+designed to be out of your way so you can focus more on what's important.
+
+* It shows your current health as a percentage.
+* At certain milestones, it will change colors and/or pop up from off-screen.
+* At 100%, the notification will be the same, plus in part 2, a player-colored
+light appears on the side of the screen.
+* At 20%/Danger, that light turns red and starts flashing...
+
+The questions are:
+* Where do we place this thing?
+* Do I implement the small +/- amount text too?
+--]]
+
+end"><children>
+	<Layer Font="mentone/_24px"
+	Text="Life"
+	InitCommand="shadowlength,1;zoom,0.5;y,15"
+	OnCommand="%function(self)
+		self:horizalign( 'left' );
+	end"
+	/>
+	<Layer Font="mentone/_24px"
+	Text="Life"
+	InitCommand="diffuse,0,1,1,1;shadowlength,1;"
+	OnCommand="%function(self)
+		if GAMESTATE:GetPlayMode() == 'PlayMode_Oni' then
+			self:settext('100%'); -- haaaaaaaaaaack
+		end
+	end"
+	StepP1MessageCommand="%function(self)
+		if GAMESTATE:IsPlayerEnabled(PLAYER_1) then
+			local life = STATSMAN:GetCurStageStats():GetPlayerStageStats(PLAYER_1):GetCurrentLife() * 100;
+			if life == 0 then
+				self:settext(' ');
+			else
+				self:settext( string.format('%d',life)..'%');
+			end
+		end
+	end"
+	/>
+</children></ActorFrame>
